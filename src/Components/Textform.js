@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 export default function Textform(prop) {
     const[text,setText]=useState('');
-    const [recognizedText, setRecognizedText] = useState('');
+  //  const [recognizedText, setRecognizedText] = useState('');
 
     function handleSpeak() {
         if ('speechSynthesis' in window) {
@@ -20,7 +20,7 @@ export default function Textform(prop) {
         }
       }
       // Speech
-      const startRecognition = () => {
+ /*     const startRecognition = () => {
         const recognition = new window.webkitSpeechRecognition();
       
         recognition.onresult = (event) => {
@@ -31,7 +31,7 @@ export default function Textform(prop) {
         recognition.start();
         setText(recognizedText)
         console.log(recognizedText)
-      }
+      }*/
      
 
 
