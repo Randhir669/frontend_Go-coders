@@ -29,6 +29,11 @@ export default function Login() {
         setPassword(event.target.value);
     }
 
+    function signup(params) {
+       // href="Registration"
+        usenavigate('/Registration')
+    }
+
     const proceedlogin = (e) => {
         e.preventDefault();
         console.log(username);
@@ -91,7 +96,7 @@ export default function Login() {
 
 
                 </form>
-                <p className="text-center card-footer ">Not a member? <a data-toggle="tab" href="Registration">Sign Up</a></p>
+                <p className="text-center card-footer ">Not a member?<a data-toggle="tab" style = {{color:'blue',cursor: 'pointer'} } onmouseover = " "  onClick = {signup}>Sign Up</a></p>
 
 
             </div>
