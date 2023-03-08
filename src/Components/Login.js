@@ -97,7 +97,7 @@ export default function Login() {
 
                 </form>
                 <div className="card-footer ">
-                    <p className="text-center">Not a member?<a><button type="submit" className="form-control btn btn-light rounded submit px-1 col-lg-1" onClick = {signup} style = {{color:'blue'}}>Sign UP</button></a></p>
+                    <p className="text-center">Not a member?<button type="submit"  className="form-control btn btn-light rounded submit px-1 col-lg-1" onClick = {signup} style = {{color:'blue'}}>Sign UP</button></p>
                     
                 </div>
 
