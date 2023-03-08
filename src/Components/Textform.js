@@ -1,10 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 
 
 export default function Textform(prop) {
     const[text,setText]=useState('');
   //  const [recognizedText, setRecognizedText] = useState('');
+
+  const usenavigate = useNavigate();
+  useEffect(()=>{
+   let username = sessionStorage.getItem('username');
+   if(username===''||username===null){
+     usenavigate('/');
+   }
+  }, []);
+
+
+
+
+
 
     function handleSpeak() {
         if ('speechSynthesis' in window) {

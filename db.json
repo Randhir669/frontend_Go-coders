@@ -1,0 +1,24 @@
+{
+  "user": [
+    {
+      "id": "adminuser",
+      "name": "Admin",
+      "password": "admin",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "country": "india",
+      "gender": "male"
+    },
+    {
+      "id": "randhir669",
+      "name": "Randhir",
+      "password": "randhir669",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "country": "india",
+      "gender": "male"
+    }
+  ]
+}

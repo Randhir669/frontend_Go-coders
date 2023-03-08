@@ -2,9 +2,6 @@
   text-align: center;
 }
 
-
-
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -31,6 +28,10 @@
   color: #61dafb;
 }
 
+.errmsg{
+  color:red
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -39,3 +40,13 @@
     transform: rotate(360deg);
   }
 }
+
+.margintop{
+  margin-top:40px
+}
+.textcolor{
+  text-emphasis-color: white;
+}
+
+
+
