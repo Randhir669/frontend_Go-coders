@@ -96,7 +96,7 @@ export default function Login() {
 
 
                 </form>
-                <p className="text-center card-footer ">Not a member?<a data-toggle="tab" style = {{color:'blue',cursor: 'pointer'} } onmouseover = " "  onClick = {signup}>Sign Up</a></p>
+                <p className="text-center card-footer ">Not a member?<a data-toggle="tab" style = {{color:'blue',cursor: 'pointer'} } href="" onmouseover = " "  onClick = {signup}>Sign Up</a></p>
 
 
             </div>
