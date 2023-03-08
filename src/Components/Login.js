@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from 'react';
-import { useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -11,16 +11,16 @@ import withReactContent from 'sweetalert2-react-content'
 
 
 export default function Login() {
-    
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const MySwal = withReactContent(Swal)
     const usenavigate = useNavigate();
 
-    useEffect(()=>{
+    useEffect(() => {
         sessionStorage.clear();
-       }, []);
+    }, []);
 
     function goToOnchangeUsername(event) {
         setUsername(event.target.value);
@@ -30,7 +30,7 @@ export default function Login() {
     }
 
     function signup(params) {
-       // href="Registration"
+        // href="Registration"
         usenavigate('/Registration')
     }
 
@@ -47,21 +47,21 @@ export default function Login() {
                     title: <strong>UserName Not Exist</strong>,
                     html: <i>please signup as a new user</i>,
                     icon: 'warning'
-                  })
+                })
                 //toast.warning("Please Enter valid userName")
             } else {
                 if (resp.password === password) {
-                 //   alert("SignIn Success")
-                    sessionStorage.setItem('username',username)
+                    //   alert("SignIn Success")
+                    sessionStorage.setItem('username', username)
                     usenavigate('/TextEditor')
                 }
                 else {
-                  //  alert("")
+                    //  alert("")
                     MySwal.fire({
                         title: <strong>Wrong Credentials</strong>,
                         html: <i>Please Enter valid credentials</i>,
                         icon: 'warning'
-                      })
+                    })
                 }
             }
         }).catch((err) => {
@@ -96,7 +96,10 @@ export default function Login() {
 
 
                 </form>
-                <p className="text-center card-footer ">Not a member?<a data-toggle="tab" style = {{color:'blue',cursor: 'pointer'} } href="" onmouseover = " "  onClick = {signup}>Sign Up</a></p>
+                <div className="card-footer ">
+                    <p className="text-center">Not a member?<a><button type="submit" className="form-control btn btn-light rounded submit px-1 col-lg-1" onClick = {signup} style = {{color:'blue'}}>Sign UP</button></a></p>
+                    
+                </div>
 
 
             </div>
