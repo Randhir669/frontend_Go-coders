@@ -49,6 +49,16 @@
       "address": "",
       "country": "india",
       "gender": "male"
+    },
+    {
+      "id": "ritz",
+      "name": "",
+      "password": "ritz",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "country": "india",
+      "gender": "male"
     }
   ]
 }

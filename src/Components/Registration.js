@@ -31,7 +31,7 @@ const Registration = () => {
 
         if (verify.textContent === "Available") {
 
-            fetch("http://localhost:3000/user", {
+            fetch("http://www.go-coders.com/user", {
                 method: "POST",
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(regobj)
@@ -69,7 +69,7 @@ const Registration = () => {
     function handleToVerifyUser() {
         let currentuser = id;
 
-        fetch("http://localhost:3000/user/" + currentuser).then((res) => {
+        fetch("http://www.go-coders.com/user/" + currentuser).then((res) => {
             return res.json();
         }).then((resp) => {
             

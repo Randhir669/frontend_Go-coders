@@ -34,7 +34,7 @@ export default function Login() {
 
     const proceedlogin = (e) => {
         e.preventDefault();
-        fetch("http://localhost:3000/user/" + username).then((res) => {
+        fetch("http://www.go-coders.com/user/" + username).then((res) => {
             return res.json();
         }).then((resp) => {
             if (Object.keys(resp).length === 0) {
