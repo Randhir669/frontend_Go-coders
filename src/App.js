@@ -3,6 +3,7 @@ import './App.css';
 import Navbar from './Components/Navbar';
 import Textform from './Components/Textform';
 import Registration from './Components/Registration';
+import ForgetPassword from './Components/ForgetPassword';
 //import { cloneElement } from 'react';
 //import About from './Components/About';
 //import { Switch } from 'react-router-dom'
@@ -36,6 +37,7 @@ function App() {
       }>
       </Route>
       <Route path='/Registration' element={<Registration />}></Route>
+      <Route path='/ForgetPassword' element={<ForgetPassword/>}></Route>
     </Routes>
   </BrowserRouter>
     

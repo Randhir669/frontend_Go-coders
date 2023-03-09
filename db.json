@@ -19,6 +19,36 @@
       "address": "",
       "country": "india",
       "gender": "male"
+    },
+    {
+      "id": "randhir123",
+      "name": "Randhir",
+      "password": "randhir123",
+      "phone": "923456789",
+      "email": "",
+      "address": "",
+      "country": "india",
+      "gender": "male"
+    },
+    {
+      "id": "Test",
+      "name": "",
+      "password": "test",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "country": "india",
+      "gender": "male"
+    },
+    {
+      "id": "randhir12",
+      "name": "",
+      "password": "randhir123",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "country": "india",
+      "gender": "male"
     }
   ]
 }

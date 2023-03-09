@@ -22,6 +22,10 @@ export default function Login() {
         sessionStorage.clear();
     }, []);
 
+    function handletoforgetpassword() {
+        usenavigate('/ForgetPassword')
+    }
+
     function goToOnchangeUsername(event) {
         setUsername(event.target.value);
     }
@@ -72,7 +76,7 @@ export default function Login() {
 
     return (
         <div className='row'>
-            <div className="offset-lg-3 col-lg-6 card " style={{ marginTop: '100px' }}>
+            <div className="offset-lg-4 col-lg-4 card " style={{ marginTop: '100px' }}>
                 <div className="card-header">
                     <div className="w-100">
                         <h3 className="mb-4 text-center ">Sign In</h3>
@@ -97,7 +101,7 @@ export default function Login() {
 
                 </form>
                 <div className="card-footer ">
-                    <p className="text-center">Not a member?<button type="submit"  className="form-control btn btn-light rounded submit px-1 col-lg-1" onClick = {signup} style = {{color:'blue'}}>Sign UP</button></p>
+                    <p className="text-center forget-password" style = {{cursor: 'pointer'}} >Forget Password<button type="submit"  className="form-control btn btn-light rounded submit px-1 col-lg-1" onClick = {signup} style = {{color:'blue'}}>Sign UP</button></p>
                     
                 </div>
 
