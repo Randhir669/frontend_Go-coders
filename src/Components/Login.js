@@ -22,9 +22,9 @@ export default function Login() {
         sessionStorage.clear();
     }, []);
 
-    function handletoforgetpassword() {
+  /*  function handletoforgetpassword() {
         usenavigate('/ForgetPassword')
-    }
+    }*/
 
     function goToOnchangeUsername(event) {
         setUsername(event.target.value);
