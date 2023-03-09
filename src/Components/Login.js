@@ -4,12 +4,6 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
 
-
-
-
-
-
-
 export default function Login() {
 
     const [username, setUsername] = useState('');
@@ -40,12 +34,9 @@ export default function Login() {
 
     const proceedlogin = (e) => {
         e.preventDefault();
-        console.log(username);
-        console.log(password);
         fetch("http://localhost:3000/user/" + username).then((res) => {
             return res.json();
         }).then((resp) => {
-            console.log(resp)
             if (Object.keys(resp).length === 0) {
                 MySwal.fire({
                     title: <strong>UserName Not Exist</strong>,

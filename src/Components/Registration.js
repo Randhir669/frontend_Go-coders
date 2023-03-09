@@ -27,7 +27,6 @@ const Registration = () => {
         e.preventDefault();
 
         let regobj = { id, name, password, phone, email, address, country, gender }
-        console.log(regobj)
         let verify = document.getElementById("verify");
 
         if (verify.textContent === "Available") {
@@ -68,15 +67,12 @@ const Registration = () => {
     }
 
     function handleToVerifyUser() {
-        console.log("inside ")
-
-
         let currentuser = id;
 
         fetch("http://localhost:3000/user/" + currentuser).then((res) => {
             return res.json();
         }).then((resp) => {
-            console.log(resp)
+            
             if (Object.keys(resp).length === 0) {
                 let myInput = document.getElementById("verify");
                 myInput.textContent = "Available";

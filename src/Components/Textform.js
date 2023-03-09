@@ -15,11 +15,6 @@ export default function Textform(prop) {
    }
   }, []);
 
-
-
-
-
-
     function handleSpeak() {
         if ('speechSynthesis' in window) {
           const synth = window.speechSynthesis;
@@ -33,25 +28,8 @@ export default function Textform(prop) {
           alert('Sorry, your browser does not support speech synthesis.');
         }
       }
-      // Speech
- /*     const startRecognition = () => {
-        const recognition = new window.webkitSpeechRecognition();
-      
-        recognition.onresult = (event) => {
-          const transcript = event.results[0][0].transcript;
-          setRecognizedText(transcript);
-        }
-      
-        recognition.start();
-        setText(recognizedText)
-        console.log(recognizedText)
-      }*/
-     
-
-
+  
     function handleToUpperCase() {
-
-        console.log("Button clicked");
         var currentText = text;
         var newText = currentText.toUpperCase();
         setText(newText);        
@@ -90,14 +68,10 @@ export default function Textform(prop) {
 
      //   var newtext = text.replace(/\s+/g, ' ').trim()
         var newtext = text.split(/[ ]+/);
-        console.log(newtext);
-        setText(newtext.join(" "));
-        console.log(text);
-        
+        setText(newtext.join(" "));   
     }
 
     function goToOnchange (event) {
-
         setText(event.target.value);
         
     }
