@@ -34,7 +34,7 @@ export default function Login() {
 
     const proceedlogin = (e) => {
         e.preventDefault();
-        fetch("http://www.go-coders.com/user/" + username).then((res) => {
+        fetch("https://my-project-data.onrender.com/user/" + username).then((res) => {
             return res.json();
         }).then((resp) => {
             if (Object.keys(resp).length === 0) {
@@ -92,7 +92,7 @@ export default function Login() {
 
                 </form>
                 <div className="card-footer ">
-                    <p className="text-center forget-password" style = {{cursor: 'pointer'}} >Forget Password<button type="submit"  className="form-control btn btn-light rounded submit px-1 col-lg-1" onClick = {signup} style = {{color:'blue'}}>Sign UP</button></p>
+                    <p className="text-center forget-password" style = {{cursor: 'pointer'}} >Forget Password<button type="submit"  className="form-control btn btn-light rounded submit px-1 col-lg-2" onClick = {signup} style = {{color:'blue'}}>Sign UP</button></p>
                     
                 </div>
 

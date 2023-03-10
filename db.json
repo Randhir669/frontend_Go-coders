@@ -59,6 +59,16 @@
       "address": "",
       "country": "india",
       "gender": "male"
+    },
+    {
+      "id": "Admin",
+      "name": "",
+      "password": "admin",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "country": "india",
+      "gender": "male"
     }
   ]
 }

@@ -31,7 +31,7 @@ const Registration = () => {
 
         if (verify.textContent === "Available") {
 
-            fetch("http://www.go-coders.com/user", {
+            fetch("https://my-project-data.onrender.com/user", {
                 method: "POST",
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(regobj)
@@ -69,7 +69,7 @@ const Registration = () => {
     function handleToVerifyUser() {
         let currentuser = id;
 
-        fetch("http://www.go-coders.com/user/" + currentuser).then((res) => {
+        fetch("https://my-project-data.onrender.com/user/" + currentuser).then((res) => {
             return res.json();
         }).then((resp) => {
             
@@ -105,7 +105,7 @@ const Registration = () => {
                                     <div className='form-group'>
                                         <label>User Name <span className='errmsg'>*</span></label>
                                         <input value={id} onChange={switchverify} required className='form-control'></input>
-                                        <p style={{ color: 'blue', cursor: 'pointer' }} id="verify" onClick={handleToVerifyUser}>Verify</p>
+                                        <p style={{ color: 'blue', cursor: 'pointer' }} className = "" id="verify" onClick={handleToVerifyUser}>Verify</p>
                                     </div>
 
                                 </div>
