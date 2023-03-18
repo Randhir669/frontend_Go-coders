@@ -11,7 +11,7 @@ export default function LanguageTranslation() {
     //  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element')
     }
     </script>
-    <p>This example displays a vertical translate button.</p>
+  
     </div>
   )
 }

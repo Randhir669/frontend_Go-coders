@@ -48,5 +48,17 @@
   text-emphasis-color: white;
 }
 
+.footer {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 30px 0;
+}
 
+.footer a {
+  color: #ffffff;
+}
+
+.footer a:hover {
+  color: #cccccc;
+}
 

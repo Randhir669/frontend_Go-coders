@@ -8,6 +8,7 @@ export default function Login() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const MySwal = withReactContent(Swal)
     const usenavigate = useNavigate();
@@ -16,15 +17,27 @@ export default function Login() {
         sessionStorage.clear();
     }, []);
 
-  /*  function handletoforgetpassword() {
-        usenavigate('/ForgetPassword')
-    }*/
+      function forget() {
+          usenavigate('/Forget')
+      }
 
     function goToOnchangeUsername(event) {
         setUsername(event.target.value);
     }
     function goToOnchangePassword(event) {
         setPassword(event.target.value);
+    }
+
+    function Spinner() {
+        return (
+            /*  <div className="spinner-border" style={{ width: '3rem', height: '3rem',color:'red'}} role="status">
+                <span className="sr-only">Loading...</span>
+              </div>*/
+        
+                <p>Sign In....</p>
+
+            
+        );
     }
 
     function signup(params) {
@@ -34,7 +47,8 @@ export default function Login() {
 
     const proceedlogin = (e) => {
         e.preventDefault();
-        fetch("https://my-project-data.onrender.com/user/" + username).then((res) => {
+        setIsSubmitting(true);
+        fetch("http://localhost:3000/user/" + username).then((res) => {
             return res.json();
         }).then((resp) => {
             if (Object.keys(resp).length === 0) {
@@ -43,12 +57,16 @@ export default function Login() {
                     html: <i>please signup as a new user</i>,
                     icon: 'warning'
                 })
+                setIsSubmitting(false);
                 //toast.warning("Please Enter valid userName")
             } else {
                 if (resp.password === password) {
                     //   alert("SignIn Success")
+                    sessionStorage.setItem('name', resp.name)
                     sessionStorage.setItem('username', username)
+                    setIsSubmitting(false);
                     usenavigate('/TextEditor')
+
                 }
                 else {
                     //  alert("")
@@ -57,10 +75,12 @@ export default function Login() {
                         html: <i>Please Enter valid credentials</i>,
                         icon: 'warning'
                     })
+                    setIsSubmitting(false);
                 }
             }
         }).catch((err) => {
             alert(err.message)
+            setIsSubmitting(false);
         })
 
     }
@@ -85,15 +105,15 @@ export default function Login() {
                         <span toggle="#password-field" className="fa fa-fw fa-eye field-icon toggle-password"></span>
                     </div>
                     <div className="form-group ">
-                        <button type="submit" className="form-control btn btn-dark rounded submit px-3" >Sign In</button>
-
+                        <button type="submit" className="form-control btn btn-dark rounded submit px-3" >
+                            {isSubmitting ? <Spinner /> : 'Sign In'}</button>
                     </div>
-
 
                 </form>
                 <div className="card-footer ">
-                    <p className="text-center forget-password" style = {{cursor: 'pointer'}} >Forget Password<button type="submit"  className="form-control btn btn-light rounded submit px-1 col-lg-2" onClick = {signup} style = {{color:'blue'}}>Sign UP</button></p>
-                    
+                    <p className="text-center forget-password" onClick={forget} style={{ cursor: 'pointer' }}>Forget Password</p>
+                    <p className="text-center" style={{ cursor: 'pointer' }} ><button type="submit" className="form-control btn btn-light rounded submit px-1 col-lg-2" onClick={signup} style={{ color: 'blue' }}>Sign UP</button></p>
+
                 </div>
 
 

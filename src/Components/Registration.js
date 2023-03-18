@@ -31,7 +31,7 @@ const Registration = () => {
 
         if (verify.textContent === "Available") {
 
-            fetch("https://my-project-data.onrender.com/user", {
+            fetch("http://localhost:3000/user", {
                 method: "POST",
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(regobj)
@@ -68,8 +68,10 @@ const Registration = () => {
 
     function handleToVerifyUser() {
         let currentuser = id;
+        let myInput = document.getElementById("verify");
+        myInput.textContent = "Verifying...";
 
-        fetch("https://my-project-data.onrender.com/user/" + currentuser).then((res) => {
+        fetch("http://localhost:3000/user/" + currentuser).then((res) => {
             return res.json();
         }).then((resp) => {
             
@@ -119,7 +121,7 @@ const Registration = () => {
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
                                         <label>Full Name <span className='errmsg'>*</span></label>
-                                        <input value={name} onChange={e => namechange(e.target.value)} className='form-control'></input>
+                                        <input value={name} onChange={e => namechange(e.target.value)} required className='form-control'></input>
                                     </div>
                                 </div>
                                 <div className='col-lg-6'>
