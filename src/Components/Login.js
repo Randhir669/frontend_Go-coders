@@ -48,7 +48,7 @@ export default function Login() {
     const proceedlogin = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        fetch("http://localhost:3000/user/" + username).then((res) => {
+        fetch("https://my-project-data.onrender.com/user/" + username).then((res) => {
             return res.json();
         }).then((resp) => {
             if (Object.keys(resp).length === 0) {
