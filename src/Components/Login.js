@@ -111,8 +111,9 @@ export default function Login() {
 
                 </form>
                 <div className="card-footer ">
-                    <p className="text-center forget-password" onClick={forget} style={{ cursor: 'pointer' }}>Forget Password</p>
-                    <p className="text-center" style={{ cursor: 'pointer' }} ><button type="submit" className="form-control btn btn-light rounded submit px-1 col-lg-2" onClick={signup} style={{ color: 'blue' }}>Sign UP</button></p>
+                   
+                  {  /*<p className="text-center forget-password" onClick={forget} style={{ cursor: 'pointer' }}></p>*/}
+                    <p className="text-center" style={{ cursor: 'pointer' }} ><span>Forget Password</span><button type="submit" className="form-control btn btn-light px-1 rounded submit  col-lg-2" onClick={signup} style={{ color: 'blue' }}>Sign UP</button></p>
 
                 </div>
 

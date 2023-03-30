@@ -6,6 +6,9 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
+import Card from 'react-bootstrap/Card';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 
@@ -20,10 +23,14 @@ export default function Textform(prop) {
     const [showSaveButton, setShowSaveButton] = useState(true);
     const [showUpdateButton, setShowUpdateButton] = useState(false);
     const [noOfFiles, setnoOfFiles] = useState(0);
+    const [isSelcted, setisSelcted] = useState('');
+    const [currentfilename, setcurrentfilename] = useState('');
+    const [mydoc, setmydoc] = useState('');
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [OptionsValue, setoptions] = useState([])
     const usenavigate = useNavigate();
+
 
     useEffect(() => {
 
@@ -40,18 +47,21 @@ export default function Textform(prop) {
     function renderData() {
 
         let id = sessionStorage.getItem('username');
+        
 
         fetch("https://my-project-data.onrender.com/text/" + id).then((res) => {
             return res.json();
         }).then((resp) => {
             let filenames = Object.keys(resp)
+            console.log(resp['Docker'])
             setnoOfFiles(filenames.length)
             let myobj = {}
-            let options = [{ label: 'My Files' }];
+            let options = [];
             for (let i = 0; i < filenames.length; i++) {
                 if (filenames[i] !== 'id') {
                     myobj['value'] = filenames[i]
                     myobj['label'] = filenames[i]
+                    myobj['textcontent'] = resp[filenames[i]]
                     options.push(myobj);
                     myobj = {};
                 }
@@ -60,6 +70,8 @@ export default function Textform(prop) {
             setoptions(options)
         })
     }
+
+   
 
     function handleSpeak() {
         if ('speechSynthesis' in window) {
@@ -118,6 +130,7 @@ export default function Textform(prop) {
             setShowUpdateButton(false);
             setShowSaveButton(true);
         }
+
     }
 
     function validating_filename() {
@@ -141,6 +154,7 @@ export default function Textform(prop) {
                 let myobj = {}
                 myobj['value'] = newfilename;
                 myobj['label'] = newfilename;
+                myobj['textcontent'] = text;
                 OptionsValue.push(myobj)
                 setoptions(OptionsValue)
                 setnoOfFiles(OptionsValue.length)
@@ -153,11 +167,11 @@ export default function Textform(prop) {
         setShow(true);
     }
 
-    function myfiles() {
+    function myfiles(fileName) {
 
-        var e = document.getElementById("floatingSelect");
-        var fileName = e.value;
-
+        // var e = document.getElementById("floatingSelect");
+        // var fileName = e.value;
+        setcurrentfilename(fileName)
         if (fileName !== 'My Files') {
 
             let id = sessionStorage.getItem('username');
@@ -190,7 +204,8 @@ export default function Textform(prop) {
         setShow(false);
         let filename
         if (showUpdateButton === true) {
-            filename = document.getElementById("floatingSelect").value;
+            filename = currentfilename;
+
             alert("Data Updated")
         } else {
             filename = document.getElementById('filename').value
@@ -239,7 +254,7 @@ export default function Textform(prop) {
                         })
                     }) // or res.json()
                     .then(res => console.log(res))
-                     console.log("Deleted Data ")
+                console.log("Deleted Data ")
 
             }
         }).catch((err) => {
@@ -247,21 +262,31 @@ export default function Textform(prop) {
         })
     }
 
+    function deletefile() {
+
+    }
+
     return (
         <>
-            <div className="container">
-                <div className='row my-3'>
+            <div className="container mx-3 col-lg-8" style={{ marginleft: '0px' }}>
+                <Card className="roundborder" style={{ boxShadow: '1px 2px 9px #6c757d', margin: '1em', padding: '1em', }}>
+                    <div className='row my-3'>
+                        <div className='col-lg-8'>
+                            <h4 id="welcome">" "</h4>
+                            <Badge pill bg="info">
+                                Total Files - {noOfFiles - 1}
+                            </Badge>
 
-                    <div className='col-lg-7'>
-                        <h4 id="welcome">" "</h4>
-                        <Badge pill bg="info">
-                            Total Files - {noOfFiles - 1}
-                        </Badge>
-                    </div>
+                        </div>
+                        { /* <Form.Group controlId="formFileSm" className="mb-3">
+                           <span> <Form.Control type="file" id="mydoc" onChange={gotofile} size="sm" />
+                            <Button className='btn btn-dark' size="sm" onClick = {saveMydoc}>Save</Button></span>
+                           
+                        </Form.Group>/*}
 
-                    <div className='col-lg-2'>
+                        { /*   <div className='col-lg-2'>
                         <FloatingLabel controlId="floatingSelect" label="" onChange={myfiles}>
-                            <Form.Select aria-label="Default select example" size="sm" style = {{border: 'none' , backgroundColor: '#343a40'  , color: '#fff',height: '33px'}} className='form-control'>
+                            <Form.Select aria-label="Default select example" size="sm" style={{ border: 'none', backgroundColor: '#343a40', color: '#fff', height: '33px' }} className='form-control'>
                                 {OptionsValue.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -269,53 +294,73 @@ export default function Textform(prop) {
                                 ))}
                             </Form.Select >
                         </FloatingLabel>
+                                </div>*/}
+
+                        <div className='col-lg-1 mr-3'>
+                            <Button className='btn btn-dark' size="sm" onClick={download}>Download</Button>
+                        </div>
+                        <div className='col-lg-1'>
+                            <Button className='btn btn-light' size="sm" onClick={clear}>Reset</Button>
+                        </div>
                     </div>
 
-                    <div className='col-lg-1'>
-                        <Button className='btn btn-dark' size="sm" onClick={download}>Download</Button>
+                    <div className='container'>
+                        <div className='row'>
+                            <textarea className="form-control" style={{ fontWeight: 'bold' }} placeholder="Enter text here " value={text} onChange={goToOnchange} id="mybox" rows="8"></textarea>
+                        </div>
                     </div>
-                    <div className='col-lg-1'>
-                        <Button className='btn btn-light' size="sm" onClick={clear}>Reset</Button>
-                    </div>
-                </div>
+                    <div className='row my-2 mx-1'>
+                        <DropdownButton id="dropdown-item-button-dark" className="" variant="dark" title="Text Action">
+                            <Dropdown.Item as="button" variant="dark" menuVariant="dark" onClick={handleToUpperCase} >Convert To Uppercase</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={handleToLowerCase} >Convert To LowerCase</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={handleToCopy} >Copy Text</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={handleToRemoveSpaces} >Remove Extra Spaces</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={handleSpeak}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
+                                <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+                                <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
+                            </svg>Speech</Dropdown.Item>
 
-                <div className='container'>
-                    <div className='row'>
-                        <textarea className="form-control" style={{ fontWeight: 'bold' }} placeholder="Enter text here " value={text} onChange={goToOnchange} id="mybox" rows="8"></textarea>
+                        </DropdownButton>
+                        {showSaveButton && <button className='btn btn-dark mx-2' onClick={save} >Save</button>}
+                        {showUpdateButton && <button className='btn btn-dark mx-2 ' onClick={saveto} >Update</button>}
+                        {showUpdateButton && <button className='btn btn-dark' onClick={deletefile} >Delete</button>}
                     </div>
-                </div>
-                { /* <div className='row my-2'>
-                    <button className='btn btn-dark mx-2' onClick={handleToUpperCase} >Convert To Uppercase</button>
-                    <button className='btn btn-dark mx-2' onClick={handleToLowerCase} >Convert To LowerCase</button>
-                    <button className='btn btn-dark mx-2' onClick={handleToCopy}>Copy Text</button>
-                    <button className='btn btn-dark mx-2' onClick={handleToRemoveSpaces}>Remove Extra Spaces</button>
-                    <button className='btn btn-dark mx-2' onClick={handleSpeak}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
-                        <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-                        <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
-                    </svg>Speech</button>
-                   </div>*/}
-                <div className='row my-2 mx-1'>
-                    <DropdownButton id="dropdown-item-button-dark" className="" variant="dark" title="Text Action">
-                        <Dropdown.Item as="button" variant="dark" menuVariant="dark" onClick={handleToUpperCase} >Convert To Uppercase</Dropdown.Item>
-                        <Dropdown.Item as="button" onClick={handleToLowerCase} >Convert To LowerCase</Dropdown.Item>
-                        <Dropdown.Item as="button" onClick={handleToCopy} >Copy Text</Dropdown.Item>
-                        <Dropdown.Item as="button" onClick={handleToRemoveSpaces} >Remove Extra Spaces</Dropdown.Item>
-                        <Dropdown.Item as="button" onClick={handleSpeak}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
-                            <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-                            <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
-                        </svg>Speech</Dropdown.Item>
 
-                    </DropdownButton>
-                    {showSaveButton && <button className='btn btn-dark mx-2' onClick={save} >Save</button>}
-                    {showUpdateButton && <button className='btn btn-dark mx-2 ' onClick={saveto} >update</button>}
-                </div>
+                    <div className='container my-3'>
+                        <h4>Your Text Summary</h4>
+                        <p>{text.split(" ").length} words and {text.length} characters</p>
+                        <p>{0.008 * text.split(" ").length} Minutes to read</p>
+                    </div>
+                </Card>
 
             </div>
-            <div className='container my-3'>
-                <h4>Your Text Summary</h4>
-                <p>{text.split(" ").length} words and {text.length} characters</p>
-                <p>{0.008 * text.split(" ").length} Minutes to read</p>
+
+
+            <div className='container col-lg-3 scrollable'>
+                <div className='row'>
+                    {OptionsValue.map((option) => (
+
+                        <Card border="dark" style={{ width: '26rem', boxShadow: '1px 2px 9px #6c757d', margin: '1em' }} className="mb-2 cards hover-shadow roundborder ">
+                            <Card.Header className="d-flex justify-content-between align-items-center">
+                                <span>{option.value}</span>
+                                <div className=''>
+                                    <FontAwesomeIcon icon={faEdit} className="" style={{ cursor: 'pointer' }} onClick={() => myfiles(option.value)} />
+                                    <FontAwesomeIcon icon={faTrash} className="ml-1" style={{ cursor: 'pointer' }} />
+                                </div>
+
+                            </Card.Header>
+                            <Card.Body>
+                                <Card.Title></Card.Title>
+                                <Card.Text>
+                                    {option.textcontent}
+                                </Card.Text>
+                            </Card.Body>
+
+                        </Card>
+                    ))}
+                </div>
             </div>
+
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -335,14 +380,21 @@ export default function Textform(prop) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="light" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={validating_filename}>
+                    <Button variant="dark" onClick={validating_filename}>
                         Save Changes
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <div>
+
+
+            </div>
+
+
+
         </>
 
     )

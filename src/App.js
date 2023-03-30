@@ -8,7 +8,10 @@ import ForgetPassword from './Components/ForgetPassword';
 import Footer from './Components/Footer';
 import React from 'react';
 import Login from './Components/Login';
+import Cards from './Components/Cards';
+import Sidebar from './Components/Sidebar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import LanguageTranslation from './Components/LanguageTranslation';
 
 
@@ -24,12 +27,12 @@ function App() {
           <Route path='/TextEditor' element={
             <>
               <Navbar title="TextEditor" />
-              <div className="container my-3">
-                <Textform heading="Enter Text To Analyze"></Textform>
+
+              <div className='row'>
+              <Textform heading="Enter Text To Analyze"></Textform>
               </div>
-              <div className="container my-3">
-                <LanguageTranslation />
-              </div> 
+
+
             </>
           }>
           </Route>

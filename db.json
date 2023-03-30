@@ -77,10 +77,6 @@
       "file 1": "filenames filenames"
     },
     {
-      "id": "Admin",
-      "Questions": "1. Request method\n2.How to stop user to access the specific server\n3.Http codes\n4.@springbootapplication\n5.optional class\n6.Exception in projects\n7.swagger\n8.deployement \n9.try catch handling\n10.@value \n11.how to change server in spring\n12.how to send httpresponse\n13.AWS\n14.@controller & @RequestController\n15.optional class\n16.Path varaible Vs QueryParm\n17.Solid programming\n18.Stream java 8\n19.@Transaction\n20.how to disable autoconfiguration\n21.how to commit after devlopment\n22.how to fetch latest codes through git\n23.flatmap"
-    },
-    {
       "id": "Test",
       "file 1": "validating_filename validating_filename update",
       "file 2": "Enter Text To Analyze Enter Text To Analyze updated",
@@ -89,13 +85,47 @@
       "file 3": "saveto saveto updated updated updated",
       "goat": "saveto saveto",
       "file 1.1": "validating_filename validating_filename kdf;kd",
-      "Docker": "DOCKER\n\n\n1. docker ps --all -> to see all images\n\n2.sudo docker start containerId  -->to run with containerId\n\n3. sudo docker exec -it  containerid bash --> to go inside container\n\n4. docker ps  --- to see current running containers\n\n5. docker compose up\n",
+      "Docker": "DOCKER compose\n\n\n1. docker ps --all -> to see all images\n\n2.sudo docker start containerId  -->to run with containerId\n\n3. sudo docker exec -it  containerid bash --> to go inside container\n\n4. docker ps  --- to see current running containers\n\n5. docker compose up\n",
       "Git": "Git command\n\ngit add .\ngit commit -m \"\"\ngit push -u origin main or branchname\ngit status\ngit branch\n\ntoken -\n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\n\n\n\nPasswords\n\ngithub\n randhir669RKY:git4@RKY\ngit4@RKY",
       "options": " <option>My Files</option>\n                                <option value=\"file 1\">file 1</option>\n                                <option value=\"Docker\">Docker</option>\n                                <option value=\"Git\">Git</option>",
       "Test": "Test Test",
       "Test1": "OptionsValue OptionsValue",
       "Eclipse shortcutkey": "Eclipse shortcutkey\n1. ctrl+shift+f =>alignment\n2.ctrl+space=>load main \n3.ctrl+space=>write sysout\n4.ctrl+shift+x =>upper case\n5.ctrl+shift+y = lower case",
-      "Test 7.0": "Test Test Test"
+      "Test 7.0": "Test Test Test",
+      "Test 7.8": "Test 7.8",
+      "json": "{\n    \"id\": \"90\",\n    \"name\": \"Resr\",\n    \"password\": \"test\",\n    \"phone\": \"\",\n    \"email\": \"\",\n    \"address\": \"\",\n    \"country\": \"india\",\n    \"gender\": \"male\"\n}",
+      "Fil2": "import \"github.com/gin-contrib/cors\""
+    },
+    {
+      "id": "Admin",
+      "Questions": "1. Request method\n2.How to stop user to access the specific server\n3.Http codes\n4.@springbootapplication\n5.optional class\n6.Exception in projects\n7.swagger\n8.deployement \n9.try catch handling\n10.@value \n11.how to change server in spring\n12.how to send httpresponse\n13.AWS\n14.@controller & @RequestController\n15.optional class\n16.Path varaible Vs QueryParm\n17.Solid programming\n18.Stream java 8\n19.@Transaction\n20.how to disable autoconfiguration\n21.how to commit after devlopment\n22.how to fetch latest codes through git\n23.flatmap",
+      "Test Admin File": "Test for Admin"
+    }
+  ],
+  "upload": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    },
+    {
+      "id": 4
+    },
+    {
+      "id": 5
+    },
+    {
+      "id": 6
+    },
+    {
+      "id": 7
+    },
+    {
+      "id": 8
     }
   ]
 }
