@@ -71,7 +71,7 @@ const Registration = () => {
         let myInput = document.getElementById("verify");
         myInput.textContent = "Verifying...";
 
-        fetch("http://localhost:3000/user/" + currentuser).then((res) => {
+        fetch("https://my-project-data.onrender.com/user/" + currentuser).then((res) => {
             return res.json();
         }).then((resp) => {
             
