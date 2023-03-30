@@ -1,5 +1,6 @@
 
 import React from 'react'
+import { Button } from 'react-bootstrap';
 import { useNavigate} from 'react-router-dom';
 
 export default function Navbar(prop) {
@@ -13,14 +14,14 @@ export default function Navbar(prop) {
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href = "/TextEditor" style={{color:'white'}}>Text Editor</a>
+        <Button className="nav-link btn btn-dark navbar-brand"  href = "/TextEditor" style={{color:'white'}}>Text Editor</Button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <a className="nav-link" href = "#" >Home <span className="sr-only">(current)</span></a>
+              <Button className="nav-link btn btn-dark" href = "#" >Home <span className="sr-only">(current)</span></Button>
             </li>
             <li className="nav-item active">
-              <a className="nav-link" href = "#" >About<span className="sr-only">(current)</span></a>
+              <Button className="nav-link btn btn-dark" href = "#" >About<span className="sr-only">(current)</span></Button>
             </li>
           </ul>
           <form className="form-inline my-2 my-lg-0">
