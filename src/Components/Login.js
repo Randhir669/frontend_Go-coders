@@ -17,9 +17,9 @@ export default function Login() {
         sessionStorage.clear();
     }, []);
 
-      function forget() {
+   /*   function forget() {
           usenavigate('/Forget')
-      }
+      }*/
 
     function goToOnchangeUsername(event) {
         setUsername(event.target.value);

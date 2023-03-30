@@ -10,7 +10,7 @@ import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import FloatingLabel from 'react-bootstrap/FloatingLabel'
+
 
 //import "bootstrap/dist/css/bootstrap.min.css";
 //import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -23,9 +23,9 @@ export default function Textform(prop) {
     const [showSaveButton, setShowSaveButton] = useState(true);
     const [showUpdateButton, setShowUpdateButton] = useState(false);
     const [noOfFiles, setnoOfFiles] = useState(0);
-    const [isSelcted, setisSelcted] = useState('');
+  //  const [isSelcted, setisSelcted] = useState('');
     const [currentfilename, setcurrentfilename] = useState('');
-    const [mydoc, setmydoc] = useState('');
+  //  const [mydoc, setmydoc] = useState('');
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [OptionsValue, setoptions] = useState([])
