@@ -31,7 +31,7 @@ const Registration = () => {
 
         if (verify.textContent === "Available") {
 
-            fetch("http://localhost:3000/user", {
+            fetch("https://my-project-data.onrender.com/user", {
                 method: "POST",
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(regobj)
