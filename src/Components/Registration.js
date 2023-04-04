@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 //import { toast } from 'react-toastify'
 //import { cloneElement } from 'react';
 import Swal from 'sweetalert2'
+import Card from 'react-bootstrap/Card';
 import withReactContent from 'sweetalert2-react-content'
 import emailjs from 'emailjs-com';
 
@@ -103,7 +104,8 @@ const Registration = () => {
     return (
         <div>
             <div className='offset-lg-3 col-lg-6'>
-                <form ref={form} className='container margintop' onSubmit={handletosubmit}>
+              <Card className="card" style={{ boxShadow: '1px 2px 9px #6c757d', marginTop: '40px',marginBottom:'15px'}}>
+                <form ref={form} className='container margintopbottom' onSubmit={handletosubmit}>
                     <div className='card'>
                         <div className='card-header'>
 
@@ -185,6 +187,7 @@ const Registration = () => {
                     </div>
 
                 </form>
+                </Card>
             </div>
         </div>
     )
