@@ -41,8 +41,9 @@
   }
 }
 
-.margintop{
-  margin-top:40px
+.margintopbottom{
+  margin-top:15px;
+  margin-bottom:15px
 }
 .textcolor{
   text-emphasis-color: white;
