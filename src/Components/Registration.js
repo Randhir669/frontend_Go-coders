@@ -103,7 +103,7 @@ const Registration = () => {
     return (
         <div>
             <div className='offset-lg-3 col-lg-6'>
-                <form className='container margintop' onSubmit={handletosubmit}>
+                <form ref={form} className='container margintop' onSubmit={handletosubmit}>
                     <div className='card'>
                         <div className='card-header'>
 
