@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 //import { cloneElement } from 'react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import emailjs from 'emailjs-com';
 
 
 const Registration = () => {
@@ -21,6 +22,7 @@ const Registration = () => {
 
     const navigate = useNavigate("")
     const MySwal = withReactContent(Swal)
+     const form = useRef();
 
     function handletosubmit(e) {
 
@@ -42,6 +44,12 @@ const Registration = () => {
                     html: <i>Registration Success,Please SignIn</i>,
                     icon: 'success'
                 })
+                 emailjs.sendForm('service_ow9fq7m', 'template_e4co5oc', form.current, 'mOAC_5gkWPHi4RVjh',{ to_email: e.target.to_email.value },{ fullname: e.target.fullname.value })
+                .then((result) => {
+                    console.log(result.text);
+                }, (error) => {
+                    console.log(error.text);
+                });
                 navigate('/')
 
             }).catch((err) => {
@@ -106,7 +114,7 @@ const Registration = () => {
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
                                         <label>User Name <span className='errmsg'>*</span></label>
-                                        <input value={id} onChange={switchverify} required className='form-control'></input>
+                                        <input value={id} name="username" onChange={switchverify} required className='form-control'></input>
                                         <p style={{ color: 'blue', cursor: 'pointer' }} className = "" id="verify" onClick={handleToVerifyUser}>Verify</p>
                                     </div>
 
@@ -114,20 +122,20 @@ const Registration = () => {
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
                                         <label>Password <span className='errmsg'>*</span></label>
-                                        <input value={password} onChange={e => passwordchange(e.target.value)} required type="password" className='form-control'></input>
+                                        <input value={password} name = "password" onChange={e => passwordchange(e.target.value)} required type="password" className='form-control'></input>
                                     </div>
 
                                 </div>
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
                                         <label>Full Name <span className='errmsg'>*</span></label>
-                                        <input value={name} onChange={e => namechange(e.target.value)} required className='form-control'></input>
+                                        <input value={name} name = "fullname" onChange={e => namechange(e.target.value)} required className='form-control'></input>
                                     </div>
                                 </div>
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
                                         <label>Email <span className='errmsg'>*</span></label>
-                                        <input value={email} onChange={e => emailchange(e.target.value)} className='form-control'></input>
+                                        <input value={email} type ='email' name = "to_email" onChange={e => emailchange(e.target.value)} className='form-control'></input>
                                     </div>
                                 </div>
                                 <div className='col-lg-6'>
