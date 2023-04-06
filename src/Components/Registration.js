@@ -1,10 +1,15 @@
 import React from 'react'
+<<<<<<< HEAD
 import { useState ,useRef} from 'react'
+=======
+import { useState,useRef } from 'react'
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
 import { useNavigate } from 'react-router-dom'
 import Card from 'react-bootstrap/Card';
 //import { toast } from 'react-toastify'
 //import { cloneElement } from 'react';
 import Swal from 'sweetalert2'
+import Card from 'react-bootstrap/Card';
 import withReactContent from 'sweetalert2-react-content'
 import emailjs from 'emailjs-com';
 
@@ -23,7 +28,11 @@ const Registration = () => {
 
     const navigate = useNavigate("")
     const MySwal = withReactContent(Swal)
+<<<<<<< HEAD
     const form = useRef();
+=======
+     const form = useRef();
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
 
     function handletosubmit(e) {
 
@@ -44,8 +53,13 @@ const Registration = () => {
         let verify = document.getElementById("verify");
 
         if (verify.textContent === "Available") {
+<<<<<<< HEAD
             console.log("regobj",regobj)
             fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data", {
+=======
+
+            fetch("https://my-project-data.onrender.com/user", {
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
                 method: "POST",
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(regobj)
@@ -56,7 +70,11 @@ const Registration = () => {
                     html: <i>Registration Success,Please SignIn</i>,
                     icon: 'success'
                 })
+<<<<<<< HEAD
                 emailjs.sendForm('service_ow9fq7m', 'template_e4co5oc', form.current, 'mOAC_5gkWPHi4RVjh',{ to_email: e.target.to_email.value },{ fullname: e.target.fullname.value })
+=======
+                 emailjs.sendForm('service_ow9fq7m', 'template_e4co5oc', form.current, 'mOAC_5gkWPHi4RVjh',{ to_email: e.target.to_email.value },{ fullname: e.target.fullname.value })
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
                 .then((result) => {
                     console.log(result.text);
                 }, (error) => {
@@ -93,7 +111,11 @@ const Registration = () => {
         let myInput = document.getElementById("verify");
         myInput.textContent = "Verifying...";
 
+<<<<<<< HEAD
         fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data/" + currentuser).then((res) => {
+=======
+        fetch("https://my-project-data.onrender.com/user/" + currentuser).then((res) => {
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
             return res.json();
         }).then((resp) => {
             if(resp == null){
@@ -119,7 +141,11 @@ const Registration = () => {
     return (
         <div>
             <div className='offset-lg-3 col-lg-6'>
+<<<<<<< HEAD
             <Card className="card" style={{ boxShadow: '1px 2px 9px #6c757d', marginTop: '40px',marginBottom:'15px'}}>
+=======
+              <Card className="card" style={{ boxShadow: '1px 2px 9px #6c757d', marginTop: '40px',marginBottom:'15px'}}>
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
                 <form ref={form} className='container margintopbottom' onSubmit={handletosubmit}>
                     <div className='card'>
                         <div className='card-header'>
@@ -139,14 +165,22 @@ const Registration = () => {
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
                                         <label>Password <span className='errmsg'>*</span></label>
+<<<<<<< HEAD
                                         <input value={password} name = "password"onChange={e => passwordchange(e.target.value)} required type="password" className='form-control'></input>
+=======
+                                        <input value={password} name = "password" onChange={e => passwordchange(e.target.value)} required type="password" className='form-control'></input>
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
                                     </div>
 
                                 </div>
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
                                         <label>Full Name <span className='errmsg'>*</span></label>
+<<<<<<< HEAD
                                         <input value={name} name = "fullname"onChange={e => namechange(e.target.value)} required className='form-control'></input>
+=======
+                                        <input value={name} name = "fullname" onChange={e => namechange(e.target.value)} required className='form-control'></input>
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
                                     </div>
                                 </div>
                                 <div className='col-lg-6'>

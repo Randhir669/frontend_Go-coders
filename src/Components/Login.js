@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card';
 import withReactContent from 'sweetalert2-react-content'
+<<<<<<< HEAD
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+=======
+import Card from 'react-bootstrap/Card';
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
 
 
 export default function Login() {
@@ -52,7 +56,11 @@ export default function Login() {
     const proceedlogin = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+<<<<<<< HEAD
         fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data/" + username).then((res) => {
+=======
+        fetch("https://my-project-data.onrender.com/user/" + username).then((res) => {
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
             return res.json();
         }).then((resp) => {
            // console.log(resp[0].password)

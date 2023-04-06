@@ -44,11 +44,14 @@
 .margintopbottom{
   margin-top:15px;
   margin-bottom:15px
+<<<<<<< HEAD
 }
 .margintopbottomlogin{
 
   margin-top:30px;
   margin-bottom:30px
+=======
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
 }
 .textcolor{
   text-emphasis-color: white;

@@ -36,6 +36,7 @@ export default function Navbar(prop) {
           <Button className="nav-link btn btn-dark" href="#" >Home <span className="sr-only">(current)</span></Button>
           <Button className="nav-link btn btn-dark" href="#" >About<span className="sr-only">(current)</span></Button>
             <form className="d-flex ml-auto">
+<<<<<<< HEAD
             <DropdownButton  className="btn roundborder" variant="" title={user}>
             <Dropdown.Item as="button" variant="dark" menuVariant="dark" onClick={logout}>Logout</Dropdown.Item>
             </DropdownButton>
@@ -49,4 +50,11 @@ export default function Navbar(prop) {
 
     </div>
   )
+=======
+            <Button className="btn btn-outline-success my-2 my-sm-0" onClick={logout}>Logout</Button>
+            </form>
+      </nav>
+    </div>
+        )
+>>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
 }
