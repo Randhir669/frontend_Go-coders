@@ -10,9 +10,6 @@ import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faEdit, faTrash,faDownload } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import Email from 'emailjs-com';
-
 
 
 //import "bootstrap/dist/css/bootstrap.min.css";
@@ -27,7 +24,6 @@ export default function Textform(prop) {
     const [showUpdateButton, setShowUpdateButton] = useState(false);
     const [noOfFiles, setnoOfFiles] = useState(0);
     //  const [isSelcted, setisSelcted] = useState('');
-    const [currentfilename, setcurrentfilename] = useState('');
     const [currentfileid, setcurrentfileid] = useState('');
     const [mydoc, setmydoc] = useState('');
     const [show, setShow] = useState(false);
@@ -51,9 +47,9 @@ export default function Textform(prop) {
     function renderData() {
 
         let id = sessionStorage.getItem('username');
-        const date = new Date();
-        const options = { timeZone: 'Asia/Kolkata' };
-        const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
+      //  const date = new Date();
+     //   const options = { timeZone: 'Asia/Kolkata' };
+       // const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
 
         fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/filedata/" + id).then((res) => {
             return res.json();
@@ -87,7 +83,7 @@ export default function Textform(prop) {
         })
     }
 
-    function getfrombackend() {
+/*    function getfrombackend() {
 
         fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data").then((res) => {
             return res.json();
@@ -95,7 +91,7 @@ export default function Textform(prop) {
             console.log(resp)
         })
 
-    }
+    }*/
 
     function handleSpeak() {
         if ('speechSynthesis' in window) {
@@ -246,8 +242,6 @@ export default function Textform(prop) {
             "savedatetime": formattedDate
         }
 
-        console.log(textobj)
-
         fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/filedata", {
             method: "POST",
             headers: { 'content-type': 'application/json' },
@@ -345,7 +339,7 @@ export default function Textform(prop) {
          });
     }
 
-    function onFileChange(event) {
+ /*   function onFileChange(event) {
        
         setmydoc( event.target.files[0])
     }
@@ -373,7 +367,7 @@ export default function Textform(prop) {
                 console.log(err)
     
             })
-      }; 
+      }; */
 
     return (
         <>

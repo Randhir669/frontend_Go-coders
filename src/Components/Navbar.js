@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Card from 'react-bootstrap/Card';
+
 
 
 export default function Navbar(prop) {
@@ -15,7 +15,6 @@ export default function Navbar(prop) {
   
   useEffect(() => {
 
-    var username = sessionStorage.getItem('username');
     var username = sessionStorage.getItem('username');
     console.log(username)
     setuser(username)

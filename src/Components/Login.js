@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card';
 import withReactContent from 'sweetalert2-react-content'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 
 
 
@@ -21,9 +20,6 @@ export default function Login() {
         sessionStorage.clear();
     }, []);
 
-      function forget() {
-          usenavigate('/Forget')
-      }
 
     function goToOnchangeUsername(event) {
         setUsername(event.target.value);
