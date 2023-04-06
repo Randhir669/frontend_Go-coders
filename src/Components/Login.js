@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
+import Card from 'react-bootstrap/Card';
 import withReactContent from 'sweetalert2-react-content'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 
 
 export default function Login() {
@@ -17,9 +21,9 @@ export default function Login() {
         sessionStorage.clear();
     }, []);
 
-   /*   function forget() {
+      function forget() {
           usenavigate('/Forget')
-      }*/
+      }
 
     function goToOnchangeUsername(event) {
         setUsername(event.target.value);
@@ -48,10 +52,15 @@ export default function Login() {
     const proceedlogin = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        fetch("http://localhost:3000/user/" + username).then((res) => {
+        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data/" + username).then((res) => {
             return res.json();
         }).then((resp) => {
-            if (Object.keys(resp).length === 0) {
+           // console.log(resp[0].password)
+            if(resp==null){
+                resp = {}
+            }
+            console.log(password)
+            if (Object.keys(resp).length === 0|| resp === null) {
                 MySwal.fire({
                     title: <strong>UserName Not Exist</strong>,
                     html: <i>please signup as a new user</i>,
@@ -60,7 +69,7 @@ export default function Login() {
                 setIsSubmitting(false);
                 //toast.warning("Please Enter valid userName")
             } else {
-                if (resp.password === password) {
+                if (resp[0].password === password) {
                     //   alert("SignIn Success")
                     sessionStorage.setItem('name', resp.name)
                     sessionStorage.setItem('username', username)
@@ -86,11 +95,13 @@ export default function Login() {
     }
 
     return (
-        <div className='row'>
-            <div className="offset-lg-4 col-lg-4 card " style={{ marginTop: '100px' }}>
+        <div className='offset-lg-4 col-lg-4'>
+        <Card className="card" style={{ boxShadow: '1px 2px 9px #6c757d', marginTop: '100px',marginBottom:'15px'}}>
+        <form   className='container margintopbottom'>
+        <div className='card'>
                 <div className="card-header">
                     <div className="w-100">
-                        <h3 className="mb-4 text-center ">Sign In</h3>
+                        <h3 className="text-center ">Sign In</h3>
                     </div>
 
                 </div>
@@ -98,27 +109,28 @@ export default function Login() {
                     <div className="form-group mt-3 ">
                         <input type="text" required className="form-control" onChange={goToOnchangeUsername} value={username} />
                         <label className="form-control-placeholder" >Username</label>
+                        
                     </div>
                     <div className="form-group ">
-                        <input id="password-field" required type="password" className="form-control" value={password} onChange={goToOnchangePassword} />
+                      <input id="password-field" required type="password" className="form-control" value={password} onChange={goToOnchangePassword} />
+                      
                         <label className="form-control-placeholder">Password</label>
                         <span toggle="#password-field" className="fa fa-fw fa-eye field-icon toggle-password"></span>
                     </div>
                     <div className="form-group ">
-                        <button type="submit" className="form-control btn btn-dark rounded submit px-3" >
+                        <button type="submit" className="form-control btn btn-dark rounded submit px-3" onClick={proceedlogin}>
                             {isSubmitting ? <Spinner /> : 'Sign In'}</button>
                     </div>
 
                 </form>
-                <div className="card-footer ">
-                   
-                  {  /*<p className="text-center forget-password" onClick={forget} style={{ cursor: 'pointer' }}></p>*/}
-                    <p className="text-center" style={{ cursor: 'pointer' }} ><span>Forget Password</span><button type="submit" className="form-control btn btn-light px-1 rounded submit  col-lg-2" onClick={signup} style={{ color: 'blue' }}>Sign UP</button></p>
-
+                <div className="card-footer text-center">
+                <a className='btn btn-light' href='/'>Forget Password</a>
+                <button type="submit" className='btn mx-2' onClick={signup} style={{ color: 'blue' }}>Sign UP</button>
                 </div>
 
-
             </div>
+            </form>
+            </Card>
         </div>
     );
 

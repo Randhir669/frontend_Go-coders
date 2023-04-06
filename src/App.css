@@ -41,8 +41,14 @@
   }
 }
 
-.margintop{
-  margin-top:40px
+.margintopbottom{
+  margin-top:15px;
+  margin-bottom:15px
+}
+.margintopbottomlogin{
+
+  margin-top:30px;
+  margin-bottom:30px
 }
 .textcolor{
   text-emphasis-color: white;
@@ -63,8 +69,17 @@
 }
 
 .scrollable {
-  height: 670px; /* set a fixed height for the div */
-  overflow-y: scroll; /* add vertical scroll */
+  height:auto;
+ max-height: 700px; /* set a fixed height for the div */
+  overflow-y: auto; /* add vertical scroll */
+}
+.scrollablecardbody{
+  /* set a fixed height for the div */
+  height: auto; /* Set the height to auto to adjust the height according to the content */
+  max-height: 200px; /* Set a maximum height to limit the size of the div */
+  overflow-y: auto;
+  
+
 }
 
 .roundborder{
@@ -86,6 +101,7 @@
 
 ::-webkit-scrollbar {
   width: 12px;
+  padding-top: 80px;
 }
 
 ::-webkit-scrollbar-track {

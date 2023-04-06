@@ -8,7 +8,10 @@ import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faEdit, faTrash,faDownload } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import Email from 'emailjs-com';
 
 
 
@@ -23,9 +26,10 @@ export default function Textform(prop) {
     const [showSaveButton, setShowSaveButton] = useState(true);
     const [showUpdateButton, setShowUpdateButton] = useState(false);
     const [noOfFiles, setnoOfFiles] = useState(0);
-  //  const [isSelcted, setisSelcted] = useState('');
+    //  const [isSelcted, setisSelcted] = useState('');
     const [currentfilename, setcurrentfilename] = useState('');
-  //  const [mydoc, setmydoc] = useState('');
+    const [currentfileid, setcurrentfileid] = useState('');
+    const [mydoc, setmydoc] = useState('');
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [OptionsValue, setoptions] = useState([])
@@ -47,31 +51,51 @@ export default function Textform(prop) {
     function renderData() {
 
         let id = sessionStorage.getItem('username');
-        
+        const date = new Date();
+        const options = { timeZone: 'Asia/Kolkata' };
+        const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
 
-        fetch("https://my-project-data.onrender.com/text/" + id).then((res) => {
+        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/filedata/" + id).then((res) => {
             return res.json();
         }).then((resp) => {
-            let filenames = Object.keys(resp)
-            console.log(resp['Docker'])
-            setnoOfFiles(filenames.length)
             let myobj = {}
             let options = [];
-            for (let i = 0; i < filenames.length; i++) {
-                if (filenames[i] !== 'id') {
-                    myobj['value'] = filenames[i]
-                    myobj['label'] = filenames[i]
-                    myobj['textcontent'] = resp[filenames[i]]
+
+            if (resp != null) {
+                setnoOfFiles(resp.length)
+
+                for (let i = 0; i < resp.length; i++) {
+                    console.log("resp[i].fileName", resp[i]['fileName'])
+                    myobj['value'] = resp[i]['filename']
+                    myobj['textcontent'] = resp[i]['filecontent']
+                    myobj['datetime'] = resp[i]['savedatetime']
+                    myobj['id'] = resp[i]['uuid']
                     options.push(myobj);
                     myobj = {};
                 }
+                
+                options.reverse()
+                setoptions(options)
+
+
+            } else {
+                setnoOfFiles(0)
+                setoptions(options)
+
             }
-            console.log(options)
-            setoptions(options)
+
         })
     }
 
-   
+    function getfrombackend() {
+
+        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data").then((res) => {
+            return res.json();
+        }).then((resp) => {
+            console.log(resp)
+        })
+
+    }
 
     function handleSpeak() {
         if ('speechSynthesis' in window) {
@@ -98,14 +122,28 @@ export default function Textform(prop) {
         setText(newText);
     }
 
-    function download() {
+    function download(content,filename) {
+
         const element = document.createElement("a");
-        const file = new Blob([document.getElementById('mybox').value],
+        const file = new Blob([content],
             { type: 'text/plain;charset=utf-8' });
         element.href = URL.createObjectURL(file);
-        element.download = "MyFile.txt";
+        element.download = filename +'.txt';
         document.body.appendChild(element);
         element.click();
+
+     /*   Email.send({
+            Host: "gocoders4u@gmail.com",
+            Username: "gocoders4u@gmail.com",
+            Password: "randhir669@4RKY",
+            To: 'randhir669@gmail.com',
+            From: "gocoders4u@gmail.com",
+            Subject: "Sending Email using javascript",
+            Body: "Well that was easy!!",
+          })
+            .then(function (message) {
+              alert("mail sent successfully")
+            });*/
 
     }
     function handleToCopy() {
@@ -133,56 +171,35 @@ export default function Textform(prop) {
 
     }
 
-    function validating_filename() {
+    function validating_filename(action) {
 
-        console.log("validating_filename")
-        let newfilename = document.getElementById('filename').value
-        let id = sessionStorage.getItem('username');
+        saveto()
 
-        fetch("https://my-project-data.onrender.com/text/" + id).then((res) => {
-            return res.json();
-        }).then((resp) => {
-            let filenames = Object.keys(resp)
-
-            console.log(filenames)
-            console.log(filenames.includes(newfilename))
-            if (filenames.includes(newfilename)) {
-                alert('filename exist')
-            } else {
-                saveto()
-
-                let myobj = {}
-                myobj['value'] = newfilename;
-                myobj['label'] = newfilename;
-                myobj['textcontent'] = text;
-                OptionsValue.push(myobj)
-                setoptions(OptionsValue)
-                setnoOfFiles(OptionsValue.length)
-                //  setText('')
-            }
-        })
     }
 
     function save() {
         setShow(true);
     }
 
-    function myfiles(fileName) {
+    function myfiles(fileid) {
 
-        // var e = document.getElementById("floatingSelect");
-        // var fileName = e.value;
-        setcurrentfilename(fileName)
-        if (fileName !== 'My Files') {
+        setcurrentfileid(fileid)
+
+        if (fileid !== 'My Files') {
 
             let id = sessionStorage.getItem('username');
-            fetch("https://my-project-data.onrender.com/text/" + id).then((res) => {
+            fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/filedata/" + id).then((res) => {
                 return res.json();
             }).then((resp) => {
                 console.log(resp)
-                let myobj = resp;
-                let filecontent = myobj[fileName]
-                console.log(myobj[filecontent])
-                setText(filecontent)
+                let filetext = ""
+                for (let i = 0; i < resp.length; i++) {
+                    if (resp[i].uuid === fileid) {
+                        filetext = resp[i].filecontent
+                    }
+
+                }
+                setText(filetext)
                 if (showUpdateButton === false) {
                     setShowUpdateButton(true);
                     setShowSaveButton(false);
@@ -202,6 +219,7 @@ export default function Textform(prop) {
     function saveto() {
 
         setShow(false);
+
         let filename
         if (showUpdateButton === true) {
             filename = currentfilename;
@@ -211,80 +229,172 @@ export default function Textform(prop) {
             filename = document.getElementById('filename').value
         }
 
-        let id = sessionStorage.getItem('username');
-        let textobj = {}
-        textobj['id'] = id;
-        textobj[filename] = text;
+        let username = sessionStorage.getItem('username');
+        const date = new Date();
+        const options = { timeZone: 'Asia/Kolkata' };
+        const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
+
+        let textobj = {
+
+            "uuid": parseInt(new Date().toISOString().replace(/[-T:\.Z]/g, "")),
+            "userid": 669,
+            "filename": filename,
+            "filecontent": text,
+            "savedate": formattedDate,
+            "filestatus": true,
+            "username": username,
+            "savedatetime": formattedDate
+        }
+
         console.log(textobj)
 
-        fetch("https://my-project-data.onrender.com/text/" + id).then((res) => {
-            return res.json();
-        }).then((resp) => {
-            console.log(resp)
-            var myobj = resp;
-            console.log(Object.keys(resp))
-            if (Object.keys(resp).length === 0) {
-
-                fetch("https://my-project-data.onrender.com/text", {
-                    method: "POST",
-                    headers: { 'content-type': 'application/json' },
-                    body: JSON.stringify(textobj)
-                }).then((res) => {
-                    //  alert("Data saved")
-                }).catch((err) => {
-                    console.log(err)
-
-                })
-
-            } else {
-                fetch('https://my-project-data.onrender.com/text/' + id, {
-                    method: 'DELETE',
-                })
-                    .then((res) => {
-                        myobj[filename] = text
-                        console.log(myobj)
-                        fetch("https://my-project-data.onrender.com/text", {
-                            method: "POST",
-                            headers: { 'content-type': 'application/json' },
-                            body: JSON.stringify(myobj)
-                        }).then((res) => {
-                            //  alert(res.text());
-                        }).catch((err) => {
-                            alert("Not Registerd")
-                        })
-                    }) // or res.json()
-                    .then(res => console.log(res))
-                console.log("Deleted Data ")
-
-            }
+        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/filedata", {
+            method: "POST",
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(textobj)
+        }).then((res) => {
+            //  alert("Data saved")
+            renderData()
         }).catch((err) => {
-            alert(err.message)
+            console.log(err)
+
         })
     }
 
-    function deletefile() {
+    function updatefile() {
+
+        let username = sessionStorage.getItem('username');
+        const date = new Date();
+        const options = { timeZone: 'Asia/Kolkata' };
+        const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
+
+        let textobj = {
+
+            "filecontent": text,
+            "filestatus": true,
+            "username": username,
+            "savedatetime": formattedDate
+        }
+
+        console.log(textobj)
+
+        
+            fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/fileupdate/" + currentfileid, {
+                method: "PUT",
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(textobj)
+            }).then((res) => {
+                //  alert("Data saved")
+                renderData()
+                alert("file updated")
+            }).catch((err) => {
+                console.log(err)
+
+            })
 
     }
+
+    function Deletefile(fileid) {
+     //   alert("file deleted")
+
+        let username = sessionStorage.getItem('username');
+        const date = new Date();
+        const options = { timeZone: 'Asia/Kolkata' };
+        const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
+
+        let textobj = {
+
+            "filecontent": text,
+            "username": username,
+            "savedatetime": formattedDate,
+            "filestatus": false
+
+        }
+
+        console.log(textobj)
+
+        Swal.fire({
+            title: "Are You Sure?",
+            text: "Do You Want To delete this file",
+            icon: "warning",
+            showConfirmButton: true,
+            showCancelButton: true,
+            confirmButtonText: "OK",
+            cancelButtonText: "Cancel",
+        }).then((result) =>{ 
+
+            if (result.isConfirmed){
+
+            fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/fileupdate/" + fileid, {
+                method: "PUT",
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(textobj)
+            }).then((res) => {
+                //  alert("Data saved")
+                renderData()
+    
+            }).catch((err) => {
+                console.log(err)
+    
+            })
+        }else{
+
+        }
+
+
+         });
+    }
+
+    function onFileChange(event) {
+       
+        setmydoc( event.target.files[0])
+    }
+
+   function onFileUpload  (){ 
+        const formData = new FormData(); 
+       
+        // Update the formData object 
+        formData.append( 
+          "myFile", 
+          mydoc,
+          mydoc.fileName
+        ); 
+       
+        
+        const file = formData.get("myFile");
+        console.log("file",file); 
+        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/fileupload", {
+                method: "POST",
+                body: formData
+            }).then((res) => {
+                 console.log("Data Upload Successfully")
+               
+            }).catch((err) => {
+                console.log(err)
+    
+            })
+      }; 
 
     return (
         <>
             <div className="container mx-3 col-lg-8" style={{ marginleft: '0px' }}>
-                <Card className="roundborder" style={{ boxShadow: '1px 2px 9px #6c757d', margin: '1em', padding: '1em', }}>
-                    <div className='row my-3'>
+                
+            <Card className="roundborder" style={{ boxShadow: '1px 2px 9px #6c757d', margin: '1em', padding: '1em', }}>
+                <div className='row my-3'>
                         <div className='col-lg-8'>
                             <h4 id="welcome">" "</h4>
                             <Badge pill bg="info">
-                                Total Files - {noOfFiles - 1}
+                                Total Files - {noOfFiles}
                             </Badge>
 
                         </div>
-                        { /* <Form.Group controlId="formFileSm" className="mb-3">
-                           <span> <Form.Control type="file" id="mydoc" onChange={gotofile} size="sm" />
-                            <Button className='btn btn-dark' size="sm" onClick = {saveMydoc}>Save</Button></span>
+                      { /*   <Form.Group controlId="formFileSm" className="mb-3" aria-disabled>
+                           <span> <Form.Control type="file" id="mydoc" onChange={onFileChange}  size="sm" />
+                            <Button className='btn btn-dark' size="sm" onClick={onFileUpload}>Save</Button></span>
                            
-                        </Form.Group>/*}
+                        </Form.Group>
 
-                        { /*   <div className='col-lg-2'>
+                          <div className='col-lg-2'>
                         <FloatingLabel controlId="floatingSelect" label="" onChange={myfiles}>
                             <Form.Select aria-label="Default select example" size="sm" style={{ border: 'none', backgroundColor: '#343a40', color: '#fff', height: '33px' }} className='form-control'>
                                 {OptionsValue.map((option) => (
@@ -296,12 +406,11 @@ export default function Textform(prop) {
                         </FloatingLabel>
                                 </div>*/}
 
-                        <div className='col-lg-1 mr-3'>
-                            <Button className='btn btn-dark' size="sm" onClick={download}>Download</Button>
-                        </div>
-                        <div className='col-lg-1'>
-                            <Button className='btn btn-light' size="sm" onClick={clear}>Reset</Button>
-                        </div>
+                        <div className='col-lg-1 ml-auto mr-2'>
+                
+                            <Button className='btn btn-light mx-1' size="sm" onClick={clear}>Reset</Button>
+                            </div>
+                     
                     </div>
 
                     <div className='container'>
@@ -322,40 +431,61 @@ export default function Textform(prop) {
 
                         </DropdownButton>
                         {showSaveButton && <button className='btn btn-dark mx-2' onClick={save} >Save</button>}
-                        {showUpdateButton && <button className='btn btn-dark mx-2 ' onClick={saveto} >Update</button>}
-                        {showUpdateButton && <button className='btn btn-dark' onClick={deletefile} >Delete</button>}
+                        {showUpdateButton && <button className='btn btn-dark mx-2 ' onClick={updatefile} >Update</button>}
+                       
                     </div>
 
                     <div className='container my-3'>
                         <h4>Your Text Summary</h4>
-                        <p>{text.split(" ").length} words and {text.length} characters</p>
+                        <p>{text.split(" ").length - 1} words and {text.length} characters</p>
                         <p>{0.008 * text.split(" ").length} Minutes to read</p>
                     </div>
+                  
                 </Card>
 
             </div>
 
 
-            <div className='container col-lg-3 scrollable'>
-                <div className='row'>
+            <div className='container col-lg-3 mx-2 scrollable' style={{paddingBottom:'20px'}}>
+             {/*  <div className='row'>
+                    <Card  style={{ width: '26rem', boxShadow: '1px 2px 9px #6c757d', margin: '1em' }} className="mb-2 roundborder">
+                    <form  className='container margintopbottom'>
+                    <div className='card'>
+                    <Card.Header>
+                    <input type="text" placeholder='Search' id="filename" autoFocus className='form-control'></input>
+                    </Card.Header>
+                    </div>
+                    </form>
+                    </Card>
+                       
+                            </div>*/}
+                <div className='row '>
                     {OptionsValue.map((option) => (
-
                         <Card border="dark" style={{ width: '26rem', boxShadow: '1px 2px 9px #6c757d', margin: '1em' }} className="mb-2 cards hover-shadow roundborder ">
-                            <Card.Header className="d-flex justify-content-between align-items-center">
-                                <span>{option.value}</span>
+                
+                       
+                        <Card.Header className="d-flex justify-content-between align-items-center">
+                                <span><h6>{option.value}</h6></span>
                                 <div className=''>
-                                    <FontAwesomeIcon icon={faEdit} className="" style={{ cursor: 'pointer' }} onClick={() => myfiles(option.value)} />
-                                    <FontAwesomeIcon icon={faTrash} className="ml-1" style={{ cursor: 'pointer' }} />
+                                <FontAwesomeIcon icon={faDownload} className="" style={{ cursor: 'pointer' }} onClick={() => download(option.textcontent,option.value)} />
+                                <FontAwesomeIcon icon={faEdit} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => myfiles(option.id)} />
+                                <FontAwesomeIcon icon={faTrash} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => Deletefile(option.id)} />
                                 </div>
 
                             </Card.Header>
-                            <Card.Body>
+                            <Card.Body className = "scrollablecardbody">
                                 <Card.Title></Card.Title>
                                 <Card.Text>
                                     {option.textcontent}
                                 </Card.Text>
-                            </Card.Body>
 
+                            </Card.Body>
+                            <Card.Footer className="justify-content-between align-items-center">
+                                <FontAwesomeIcon icon={faClock} className="" style={{ marginRight: '10px' }} />
+                                {option.datetime}
+                            </Card.Footer>
+                           
+                         
                         </Card>
                     ))}
                 </div>

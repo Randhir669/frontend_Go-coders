@@ -69,12 +69,37 @@
       "address": "",
       "country": "india",
       "gender": "male"
+    },
+    {
+      "id": "RKUMA475",
+      "name": "Randhir",
+      "password": "test",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "country": "india",
+      "gender": "male"
+    },
+    {
+      "id": "Test78",
+      "name": "test",
+      "password": "test",
+      "phone": "",
+      "email": "",
+      "address": "",
+      "country": "india",
+      "gender": "male"
     }
   ],
   "text": [
     {
       "id": "ritz",
       "file 1": "filenames filenames"
+    },
+    {
+      "id": "Admin",
+      "Questions": "1. Request method\n2.How to stop user to access the specific server\n3.Http codes\n4.@springbootapplication\n5.optional class\n6.Exception in projects\n7.swagger\n8.deployement \n9.try catch handling\n10.@value \n11.how to change server in spring\n12.how to send httpresponse\n13.AWS\n14.@controller & @RequestController\n15.optional class\n16.Path varaible Vs QueryParm\n17.Solid programming\n18.Stream java 8\n19.@Transaction\n20.how to disable autoconfiguration\n21.how to commit after devlopment\n22.how to fetch latest codes through git\n23.flatmap",
+      "Test Admin File": "Test for Admin"
     },
     {
       "id": "Test",
@@ -94,12 +119,9 @@
       "Test 7.0": "Test Test Test",
       "Test 7.8": "Test 7.8",
       "json": "{\n    \"id\": \"90\",\n    \"name\": \"Resr\",\n    \"password\": \"test\",\n    \"phone\": \"\",\n    \"email\": \"\",\n    \"address\": \"\",\n    \"country\": \"india\",\n    \"gender\": \"male\"\n}",
-      "Fil2": "import \"github.com/gin-contrib/cors\""
-    },
-    {
-      "id": "Admin",
-      "Questions": "1. Request method\n2.How to stop user to access the specific server\n3.Http codes\n4.@springbootapplication\n5.optional class\n6.Exception in projects\n7.swagger\n8.deployement \n9.try catch handling\n10.@value \n11.how to change server in spring\n12.how to send httpresponse\n13.AWS\n14.@controller & @RequestController\n15.optional class\n16.Path varaible Vs QueryParm\n17.Solid programming\n18.Stream java 8\n19.@Transaction\n20.how to disable autoconfiguration\n21.how to commit after devlopment\n22.how to fetch latest codes through git\n23.flatmap",
-      "Test Admin File": "Test for Admin"
+      "Fil2": "import \"github.com/gin-contrib/cors\"",
+      "Query": "SELECT t1.usr,t.filess FROM \"FileManager\"  t, \"t_personal\" t1\nwhere t.sid=t1.uuid\nand t1.uuid=7",
+      "Query 2": "INSERT INTO \"TextEditorFileContent\" (uuid,userid,filename,filecontent,savedate,filestatus)\nVALUES(003,670,'Eclipse shortcutkey',\n'Eclipse shortcutkey\n1. ctrl+shift+f =>alignment\n2.ctrl+space=>load main \n3.ctrl+space=>write sysout\n4.ctrl+shift+x =>upper case\n5.ctrl+shift+y = lower case',\n'2023-04-01',true)"
     }
   ],
   "upload": [

@@ -26,7 +26,7 @@ function App() {
           <Route path='/' element={<Login />}></Route>
           <Route path='/TextEditor' element={
             <>
-              <Navbar title="TextEditor" />
+              <Navbar title="TextEditor" fixed="top" />
 
               <div className='row'>
               <Textform heading="Enter Text To Analyze"></Textform>
