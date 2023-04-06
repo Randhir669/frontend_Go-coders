@@ -231,7 +231,7 @@ export default function Textform(prop) {
         const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
 
         let textobj = {
-            "uuid": parseInt(new Date().toISOString().replace(/[-T:\.Z]/g,"")),
+            "uuid": parseInt(new Date().toISOString().replace(/[-T:Z]/g,"")),
             "userid": 669,
             "filename": filename,
             "filecontent": text,
