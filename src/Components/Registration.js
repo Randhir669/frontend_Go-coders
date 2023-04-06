@@ -5,7 +5,6 @@ import Card from 'react-bootstrap/Card';
 //import { toast } from 'react-toastify'
 //import { cloneElement } from 'react';
 import Swal from 'sweetalert2'
-import Card from 'react-bootstrap/Card';
 import withReactContent from 'sweetalert2-react-content'
 import emailjs from 'emailjs-com';
 
