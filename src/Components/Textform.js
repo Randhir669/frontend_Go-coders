@@ -216,9 +216,9 @@ export default function Textform(prop) {
 
         setShow(false);
 
-        let filename
+        let filename = ""
         if (showUpdateButton === true) {
-            filename = currentfilename;
+          //  filename = currentfilename;
 
             alert("Data Updated")
         } else {
