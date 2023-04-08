@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 
 export default function Filemanager() {
@@ -11,6 +13,8 @@ export default function Filemanager() {
     const [mydoc, setmydoc] = useState('');
     const usenavigate = useNavigate();
     const [OptionsValue, setoptions] = useState([])
+    const MySwal = withReactContent(Swal)
+    const [Save, setSave] = useState('Save')
 
     useEffect(() => {
 
@@ -62,7 +66,16 @@ export default function Filemanager() {
         const inputField = document.getElementById("mydoc");
         let username = sessionStorage.getItem('username');
         // Update the formData object 
-        formData.append(
+        
+         if (document.getElementById("mydoc").value === '') {
+            MySwal.fire({
+                title: <strong>File not found!</strong>,
+                html: <i>please choose a file to upload</i>,
+                icon: 'warning'
+            })
+        } else {
+           setSave('Saving...')
+           formData.append(
             "myFile",
             mydoc,
             mydoc.fileName,
@@ -70,7 +83,6 @@ export default function Filemanager() {
         );
         formData.append('username',username);
         formData.append('savedatetime',formattedDate);
-      //  const file = formData.get("myFile");
     
         fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/fileupload", {
             method: "POST",
@@ -79,11 +91,15 @@ export default function Filemanager() {
             console.log("Data Upload Successfully")
             inputField.value = '';
             renderAllDocs()
+            setSave('Save')
 
         }).catch((err) => {
             console.log(err)
 
         })
+      }
+        
+      
     };
 
     function ondownload(filename) {
@@ -118,13 +134,13 @@ export default function Filemanager() {
                         <Form.Group controlId="formFile" className="mb-3">
                             <Form.Label>Browse A File To Upload</Form.Label>
                             <Form.Control type="file" id="mydoc" onChange={onFileChange} />
-                            <span><Button className='btn btn-dark my-2' size="" onClick={onFileUpload}>Save</Button></span>
+                            <span><Button className='btn btn-dark my-2' size="" onClick={onFileUpload}>{Save}</Button></span>
                         </Form.Group>
 
                     </Card.Body>
                 </Card>
             </div>
-            <div className="container mx-3 col-lg-5 my-5" style={{ marginleft: '0px' }}>
+            <div className="container mx-3 col-lg-6 my-5" style={{ marginleft: '0px' }}>
 
                 <Card>
                     <Card.Header className='card text-center' style={{ backgroundColor: 'black' }}>
@@ -146,7 +162,7 @@ export default function Filemanager() {
                                 <td>{option.id}</td>
                                 <td>{option.filename}</td>
                                 <td>{option.Dateandtime}</td>
-                                <td><Button className='btn btn-dark my-2' size="sm" onClick={() => ondownload(option.filename)}>Download</Button></td>
+                                <td><Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(option.filename)}>Download</Button></td>
                             </tr>
                         ))}
                     </tbody>
