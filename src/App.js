@@ -8,8 +8,7 @@ import ForgetPassword from './Components/ForgetPassword';
 import Footer from './Components/Footer';
 import React from 'react';
 import Login from './Components/Login';
-
-
+import Filemanager from './Components/Filemanager';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 
@@ -31,8 +30,16 @@ function App() {
               <div className='row'>
               <Textform heading="Enter Text To Analyze"></Textform>
               </div>
+            </>
+          }>
+          </Route>
+          <Route path='/Filemanager' element={
+            <>
+              <Navbar title="Filemanager" fixed="top" />
 
-
+              <div className='row'>
+              <Filemanager></Filemanager>
+              </div>
             </>
           }>
           </Route>

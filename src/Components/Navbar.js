@@ -32,7 +32,7 @@ export default function Navbar(prop) {
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       
           <Button className="nav-link btn btn-dark navbar-brand" href="/TextEditor" style={{ color: 'white' }}>Text Editor</Button>
-          <Button className="nav-link btn btn-dark" href="#" >Home <span className="sr-only">(current)</span></Button>
+          <Button className="nav-link btn btn-dark" href="/Filemanager" >FileManager <span className="sr-only">(current)</span></Button>
           <Button className="nav-link btn btn-dark" href="#" >About<span className="sr-only">(current)</span></Button>
             <form className="d-flex ml-auto">
             <DropdownButton  className="btn roundborder" variant="" title={user}>
