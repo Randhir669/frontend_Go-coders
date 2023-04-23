@@ -42,7 +42,7 @@ export default function Textform(prop) {
             usenavigate('/');
         }
         renderData();
-    }, []);
+    },);
 
     function renderData() {
 
