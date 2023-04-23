@@ -15,9 +15,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 
 function App() {
-
-
-  // 
+ 
   return (
     <div>
       <BrowserRouter>
@@ -57,7 +55,6 @@ function App() {
           <Route path='/Registration' element={<Registration />}></Route>
           <Route path='/Forget' element={<ForgetPassword />}></Route>
           <Route path='/Game' element={<Game />}></Route>
-      //    <Route path='/Footer' element={<Footer />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
