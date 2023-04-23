@@ -292,7 +292,6 @@ export default function Filemanager() {
                 </Card.Body>
             </Card>
             </div>
-
             <div className="container mx-3 col-lg-6 my-5" style={{ marginleft: '0px' }}>
 
                 <Card>
