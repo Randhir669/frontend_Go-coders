@@ -43,7 +43,7 @@ export default function Filemanager() {
         }
         renderAllDocs();
         renderAllUsers();
-    },);
+    },[]);
 
     function renderAllUsers() {
 
