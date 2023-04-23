@@ -41,9 +41,10 @@ export default function Filemanager() {
         if (username === '' || username === null) {
             usenavigate('/');
         }
-     //   renderAllDocs();
-     //   renderAllUsers();
-    },[]);
+        console.log("Inside useEffect")
+        renderAllDocs();
+        renderAllUsers();
+    },);
 
     function renderAllUsers() {
 
