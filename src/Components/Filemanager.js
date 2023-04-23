@@ -41,8 +41,8 @@ export default function Filemanager() {
         if (username === '' || username === null) {
             usenavigate('/');
         }
-        renderAllDocs();
-        renderAllUsers();
+     //   renderAllDocs();
+     //   renderAllUsers();
     },[]);
 
     function renderAllUsers() {
