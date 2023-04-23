@@ -1,7 +1,14 @@
 .footer {
     background-color: black;
-    padding: 20px;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     text-align: center;
+    position: absolute;
+    left:0;
+    bottom:0;
+    right:0;
+     width: 100%;
   }
   
   .footerContent {
@@ -10,6 +17,7 @@
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
+    color: white;
   }
   
   @media screen and (max-width: 768px) {

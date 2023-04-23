@@ -44,14 +44,11 @@
 .margintopbottom{
   margin-top:15px;
   margin-bottom:15px
-<<<<<<< HEAD
 }
 .margintopbottomlogin{
 
   margin-top:30px;
   margin-bottom:30px
-=======
->>>>>>> bee27ef73f34b015e3761ab3ec121fa4148bdb96
 }
 .textcolor{
   text-emphasis-color: white;
@@ -73,7 +70,13 @@
 
 .scrollable {
   height:auto;
- max-height: 700px; /* set a fixed height for the div */
+ max-height: 600px; /* set a fixed height for the div */
+  overflow-y: auto; /* add vertical scroll */
+}
+
+.scrollableTable {
+  height:auto;
+ max-height: 300px; /* set a fixed height for the div */
   overflow-y: auto; /* add vertical scroll */
 }
 .scrollablecardbody{
@@ -119,6 +122,16 @@
 
 #root{
   overflow-x: hidden
+}
+
+html, body {
+  height: 100%;
+}
+
+/* Set the minimum height of the content to 100% */
+#root {
+  min-height: 100%;
+  position: relative; /* This is needed for the footer to position correctly */
 }
 
 

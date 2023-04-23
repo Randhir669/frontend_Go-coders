@@ -22,14 +22,23 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Login />}></Route>
+          <Route path='/' element={
+            <>
+            <div className='row' style = {{marginBottom:'90px'}}>
+            <Login />
+            </div>
+            <Footer></Footer>
+            </>
+        }>
+      </Route>
           <Route path='/TextEditor' element={
             <>
               <Navbar title="TextEditor" fixed="top" />
 
-              <div className='row'>
+              <div className='row' style = {{marginBottom:'90px'}}>
               <Textform heading="Enter Text To Analyze"></Textform>
               </div>
+              <Footer></Footer>
             </>
           }>
           </Route>
@@ -40,13 +49,15 @@ function App() {
               <div className='row'>
               <Filemanager></Filemanager>
               </div>
+              <Footer></Footer>
+              
             </>
           }>
           </Route>
           <Route path='/Registration' element={<Registration />}></Route>
           <Route path='/Forget' element={<ForgetPassword />}></Route>
           <Route path='/Game' element={<Game />}></Route>
-          <Route path='/Footer' element={<Footer />}></Route>
+      //    <Route path='/Footer' element={<Footer />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

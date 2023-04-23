@@ -29,7 +29,7 @@ export default function Navbar(prop) {
   return (
     <div>
     
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-lg  bg-dark">
       
           <Button className="nav-link btn btn-dark navbar-brand" href="/TextEditor" style={{ color: 'white' }}>Text Editor</Button>
           <Button className="nav-link btn btn-dark" href="/Filemanager" >FileManager <span className="sr-only">(current)</span></Button>
