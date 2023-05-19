@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect} from 'react'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -18,69 +18,77 @@ export default function Filemanager() {
     const usenavigate = useNavigate();
     const [OptionsValue, setoptions] = useState([])
     const [alldocslist, setalldoc] = useState([])
-    const [alluserlist , setallusers] = useState([])
+    const [alluserlist, setallusers] = useState([])
     const MySwal = withReactContent(Swal)
     const [Save, setSave] = useState('Save')
 
     const [selectedOption, setSelectedOption] = useState('');
     const [selectedUser, setSelectedUser] = useState('');
-
+    const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com";
+  //  const url = "http://localhost:8000";
+  
     const handleChange = (selectedOption) => {
-        setSelectedOption(selectedOption); 
+        setSelectedOption(selectedOption);
     };
 
     const handleChangeUser = (selectedUser) => {
-      
         setSelectedUser(selectedUser);
-        
     };
 
     useEffect(() => {
 
-        var username = sessionStorage.getItem('username');
+       var username = sessionStorage.getItem('username');
         if (username === '' || username === null) {
             usenavigate('/');
         }
-        renderAllDocs();
-        renderAllUsers();
-    },);
+       
+    });// eslint-disable-line react-hooks/exhaustive-deps
 
-    function renderAllUsers() {
+    useEffect(() => {
+        renderAllUsers()  
+        
+     },[]);
+    
+     useEffect(() => {
+        renderAllDocs()
+     },[]);// eslint-disable-line react-hooks/exhaustive-deps
 
-        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data").then((res) => {
-            return res.json();
-        }).then((resp) => {
-            let userobj = {}
-            let allusersnames = [];
-            if (resp != null) {
-
-                for (let i = 0; i < resp.length; i++) {
-                    userobj['label'] = resp[i]['id']
-                    userobj['value'] = resp[i]['id']
-                    allusersnames.push(userobj);
-                    userobj = {};
-                }
-                setallusers(allusersnames)
-
-
-            }else{
-                setallusers(allusersnames)
-            }
-        })   
-    }
+    function renderAllUsers () {
+  
+          fetch(url+"/userdata").then((res) => {
+              return res.json();
+          }).then((resp) => {
+              let userobj = {}
+              let allusersnames = [];
+              if (resp != null) {
+  
+                  for (let i = 0; i < resp.length; i++) {
+                      userobj['label'] = resp[i]['id']
+                      userobj['value'] = resp[i]['id']
+                      allusersnames.push(userobj);
+                      userobj = {};
+                  }
+                  setallusers(allusersnames)
+  
+  
+              }else{
+                  setallusers(allusersnames)
+              }
+          })   
+      }
 
     function renderAllDocs() {
         let id = sessionStorage.getItem('username');
 
-        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/alldoc/" + id).then((res) => {
+        fetch(url+"/alldoc/" + id).then((res) => {
             return res.json();
         }).then((resp) => {
-            
+
             let myobj = {}
             let options = [];
             let docobj = {};
             let alldocnames = [];
-            
+
             if (resp != null) {
 
                 for (let i = 0; i < resp.length; i++) {
@@ -109,7 +117,7 @@ export default function Filemanager() {
         })
     }
 
-    function Onsharefiles(){
+    function Onsharefiles() {
         MySwal.fire({
             title: <strong>Coming Soon!</strong>,
             html: <i>currently not working</i>,
@@ -149,7 +157,7 @@ export default function Filemanager() {
             formData.append('username', username);
             formData.append('savedatetime', formattedDate);
 
-            fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/fileupload", {
+            fetch(url+"/fileupload", {
                 method: "POST",
                 body: formData
             }).then((res) => {
@@ -170,7 +178,7 @@ export default function Filemanager() {
 
     function ondownload(filename) {
 
-        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/filedownload/" + filename).then((res) => {
+        fetch(url+"/filedownload/" + filename).then((res) => {
             return res.blob();
         }).then(blob => {
             // create a temporary URL to the blob
@@ -214,7 +222,7 @@ export default function Filemanager() {
 
             if (result.isConfirmed) {
 
-                fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/deletefile/" + fid, {
+                fetch(url+"/deletefile/" + fid, {
                     method: "PUT",
                     headers: { 'content-type': 'application/json' },
                     body: JSON.stringify(textobj)
@@ -252,45 +260,45 @@ export default function Filemanager() {
 
                 </Card>
                 <Card className='margintopbottom'>
-                <Card.Header className='card text-center' style={{ backgroundColor: 'black', color: 'white' }}>
-                    <h4>Share Files</h4>
-                </Card.Header>
-                <Card.Body>
-                   <div className='row'>
-                    <Form.Group controlId="formFile" className="col-lg-6">
-                       <h6>Users</h6>
-                        <Select
-                            className="basic-single"
-                            classNamePrefix="select user"
-                            isLoading={false}
-                            isClearable={true}
-                            isSearchable={true}
-                            name="color"
-                            id="user"
-                            value={selectedUser}
-                            onChange={handleChangeUser}
-                            options={alluserlist}
-                        />
-                        </Form.Group>
-                        <Form.Group controlId="formFile" className="col-lg-6">
-                        <h6>files</h6>
-                        <Select
-                            className="basic-single"
-                            classNamePrefix="select user"
-                            isLoading={false}
-                            isClearable={true}
-                            isSearchable={true}
-                            name="files"
-                            value={selectedOption}
-                            onChange={handleChange}
-                            options={alldocslist}
-                        />
-                        </Form.Group>
+                    <Card.Header className='card text-center' style={{ backgroundColor: 'black', color: 'white' }}>
+                        <h4>Share Files</h4>
+                    </Card.Header>
+                    <Card.Body>
+                        <div className='row'>
+                            <Form.Group controlId="formFile" className="col-lg-6">
+                                <h6>Users</h6>
+                                <Select
+                                    className="basic-single"
+                                    classNamePrefix="select user"
+                                    isLoading={false}
+                                    isClearable={true}
+                                    isSearchable={true}
+                                    name="color"
+                                    id="user"
+                                    value={selectedUser}
+                                    onChange={handleChangeUser}
+                                    options={alluserlist}
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="formFile" className="col-lg-6">
+                                <h6>files</h6>
+                                <Select
+                                    className="basic-single"
+                                    classNamePrefix="select user"
+                                    isLoading={false}
+                                    isClearable={true}
+                                    isSearchable={true}
+                                    name="files"
+                                    value={selectedOption}
+                                    onChange={handleChange}
+                                    options={alldocslist}
+                                />
+                            </Form.Group>
                         </div>
                         <span><Button className='btn btn-dark my-2' size="" onClick={Onsharefiles}>Send</Button></span>
-                    
-                </Card.Body>
-            </Card>
+
+                    </Card.Body>
+                </Card>
             </div>
             <div className="container mx-3 col-lg-6 my-5" style={{ marginleft: '0px' }}>
 
@@ -325,7 +333,7 @@ export default function Filemanager() {
 
             </div>
             <div className="container mx-3 col-lg-5 margintopbottom" style={{ marginleft: '0px' }}>
-              
+
             </div>
         </>
     )

@@ -15,6 +15,8 @@ export default function Login() {
 
     const MySwal = withReactContent(Swal)
     const usenavigate = useNavigate();
+    const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com"
+    //const url = "http://localhost:8000";
 
     useEffect(() => {
         sessionStorage.clear();
@@ -48,7 +50,7 @@ export default function Login() {
     const proceedlogin = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data/" + username).then((res) => {
+        fetch(url+"/data/" + username).then((res) => {
             return res.json();
         }).then((resp) => {
            // console.log(resp[0].password)
@@ -92,6 +94,7 @@ export default function Login() {
 
     return (
         <div className='offset-lg-4 col-lg-4'>
+       
         <Card className="card" style={{ boxShadow: '1px 2px 9px #6c757d', marginTop: '100px',marginBottom:'15px'}}>
         <form   className='container margintopbottom'>
         <div className='card'>

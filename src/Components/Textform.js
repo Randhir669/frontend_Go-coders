@@ -25,11 +25,13 @@ export default function Textform(prop) {
     const [noOfFiles, setnoOfFiles] = useState(0);
     //  const [isSelcted, setisSelcted] = useState('');
     const [currentfileid, setcurrentfileid] = useState('');
-  //  const [mydoc, setmydoc] = useState('');
+  
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [OptionsValue, setoptions] = useState([])
     const usenavigate = useNavigate();
+    const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com";
+    //  const url = "http://localhost:8000";
 
 
     useEffect(() => {
@@ -42,7 +44,7 @@ export default function Textform(prop) {
             usenavigate('/');
         }
         renderData();
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     function renderData() {
 
@@ -51,7 +53,7 @@ export default function Textform(prop) {
      //   const options = { timeZone: 'Asia/Kolkata' };
        // const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
 
-        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/filedata/" + id).then((res) => {
+        fetch(url+"/filedata/" + id).then((res) => {
             return res.json();
         }).then((resp) => {
             let myobj = {}
@@ -85,7 +87,7 @@ export default function Textform(prop) {
 
 /*    function getfrombackend() {
 
-        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data").then((res) => {
+        fetch("http://localhost:8000/data").then((res) => {
             return res.json();
         }).then((resp) => {
             console.log(resp)
@@ -184,7 +186,7 @@ export default function Textform(prop) {
         if (fileid !== 'My Files') {
 
             let id = sessionStorage.getItem('username');
-            fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/filedata/" + id).then((res) => {
+            fetch(url+"/filedata/" + id).then((res) => {
                 return res.json();
             }).then((resp) => {
                 console.log(resp)
@@ -241,7 +243,7 @@ export default function Textform(prop) {
             "savedatetime": formattedDate
         }
 
-        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/filedata", {
+        fetch(url+"/filedata", {
             method: "POST",
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(textobj)
@@ -272,7 +274,7 @@ export default function Textform(prop) {
         console.log(textobj)
 
         
-            fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/fileupdate/" + currentfileid, {
+            fetch(url+"/fileupdate/" + currentfileid, {
                 method: "PUT",
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(textobj)
@@ -318,7 +320,7 @@ export default function Textform(prop) {
 
             if (result.isConfirmed){
 
-            fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/fileupdate/" + fileid, {
+            fetch(url+"/fileupdate/" + fileid, {
                 method: "PUT",
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(textobj)
@@ -338,35 +340,7 @@ export default function Textform(prop) {
          });
     }
 
- /*   function onFileChange(event) {
-       
-        setmydoc( event.target.files[0])
-    }
-
-   function onFileUpload  (){ 
-        const formData = new FormData(); 
-       
-        // Update the formData object 
-        formData.append( 
-          "myFile", 
-          mydoc,
-          mydoc.fileName
-        ); 
-       
-        
-        const file = formData.get("myFile");
-        console.log("file",file); 
-        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/fileupload", {
-                method: "POST",
-                body: formData
-            }).then((res) => {
-                 console.log("Data Upload Successfully")
-               
-            }).catch((err) => {
-                console.log(err)
-    
-            })
-      }; */
+ /*    */
 
     return (
         <>

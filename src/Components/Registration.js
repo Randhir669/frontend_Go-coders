@@ -7,7 +7,7 @@ import Card from 'react-bootstrap/Card';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import emailjs from 'emailjs-com';
-
+//import { encrypt, decrypt, compare } from 'n-krypta';
 
 const Registration = () => {
 
@@ -24,6 +24,8 @@ const Registration = () => {
     const navigate = useNavigate("")
     const MySwal = withReactContent(Swal)
     const form = useRef();
+    const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com"
+  //  const url = "http://localhost:8000"
 
     function handletosubmit(e) {
 
@@ -42,10 +44,10 @@ const Registration = () => {
                 "gender":gender
         }
         let verify = document.getElementById("verify");
-
+        
         if (verify.textContent === "Available") {
             console.log("regobj",regobj)
-            fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data", {
+            fetch(url+"/data", {
                 method: "POST",
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(regobj)
@@ -93,7 +95,7 @@ const Registration = () => {
         let myInput = document.getElementById("verify");
         myInput.textContent = "Verifying...";
 
-        fetch("https://d85cc0uyae.execute-api.us-east-1.amazonaws.com/data/" + currentuser).then((res) => {
+        fetch(url+"/data/" + currentuser).then((res) => {
             return res.json();
         }).then((resp) => {
             if(resp == null){
