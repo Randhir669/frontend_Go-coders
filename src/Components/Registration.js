@@ -148,18 +148,18 @@ const Registration = () => {
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
                                         <label>Full Name <span className='errmsg'>*</span></label>
-                                        <input value={name} name = "fullname"onChange={e => namechange(e.target.value)} required className='form-control'></input>
+                                        <input value={name} name = "fullname" onChange={e => namechange(e.target.value)} required type = "text" className='form-control'></input>
                                     </div>
                                 </div>
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
                                         <label>Email <span className='errmsg'>*</span></label>
-                                        <input value={email} type ='email' name = "to_email" onChange={e => emailchange(e.target.value)} className='form-control'></input>
+                                        <input value={email} type ='email' name = "to_email" required onChange={e => emailchange(e.target.value)} className='form-control'></input>
                                     </div>
                                 </div>
                                 <div className='col-lg-6'>
                                     <div className='form-group'>
-                                        <label>PhoneNo <span className='errmsg'>*</span></label>
+                                        <label>PhoneNo <span className='errmsg'></span></label>
                                         <input value={phone} onChange={e => phonechange(e.target.value)} type="number" className='form-control'></input>
                                     </div>
                                 </div>

@@ -24,7 +24,7 @@ export default function Filemanager() {
 
     const [selectedOption, setSelectedOption] = useState('');
     const [selectedUser, setSelectedUser] = useState('');
-    const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com";
+   const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com";
   //  const url = "http://localhost:8000";
   
     const handleChange = (selectedOption) => {
@@ -47,7 +47,7 @@ export default function Filemanager() {
     useEffect(() => {
         renderAllUsers()  
         
-     },[]);
+     },[]);// eslint-disable-line react-hooks/exhaustive-deps
     
      useEffect(() => {
         renderAllDocs()
