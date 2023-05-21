@@ -10,6 +10,7 @@ import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faEdit, faTrash,faDownload } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 
 //import "bootstrap/dist/css/bootstrap.min.css";

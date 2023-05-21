@@ -10,6 +10,7 @@ import React from 'react';
 import Login from './Components/Login';
 import Filemanager from './Components/Filemanager';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 
 

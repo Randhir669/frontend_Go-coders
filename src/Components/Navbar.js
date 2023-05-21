@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 
 
@@ -35,7 +36,7 @@ export default function Navbar(prop) {
           <Button className="nav-link btn btn-dark" href="/Filemanager" >FileManager <span className="sr-only">(current)</span></Button>
           <Button className="nav-link btn btn-dark" href="#" >About<span className="sr-only">(current)</span></Button>
             <form className="d-flex ml-auto">
-            <DropdownButton  className="btn roundborder" variant="" title={user}>
+            <DropdownButton  className="roundborder btn" variant ="light" title={user}>
             <Dropdown.Item as="button" variant="dark" menuVariant="dark" onClick={logout}>Logout</Dropdown.Item>
             </DropdownButton>
             </form>

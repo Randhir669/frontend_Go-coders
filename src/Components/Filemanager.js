@@ -17,20 +17,16 @@ export default function Filemanager() {
     const [mydoc, setmydoc] = useState('');
     const usenavigate = useNavigate();
     const [OptionsValue, setoptions] = useState([])
-    const [alldocslist, setalldoc] = useState([])
     const [alluserlist, setallusers] = useState([])
     const MySwal = withReactContent(Swal)
     const [Save, setSave] = useState('Save')
+    const [Send, setSend] = useState('Send')
 
-    const [selectedOption, setSelectedOption] = useState('');
-    const [selectedUser, setSelectedUser] = useState('');
+   const [selectedUser, setSelectedUser] = useState('');
    const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com";
-  //  const url = "http://localhost:8000";
+  // const url = "http://localhost:8000";
   
-    const handleChange = (selectedOption) => {
-        setSelectedOption(selectedOption);
-    };
-
+ 
     const handleChangeUser = (selectedUser) => {
         setSelectedUser(selectedUser);
     };
@@ -49,34 +45,34 @@ export default function Filemanager() {
         
      },[]);// eslint-disable-line react-hooks/exhaustive-deps
     
-     useEffect(() => {
+     useEffect(() => {        
         renderAllDocs()
      },[]);// eslint-disable-line react-hooks/exhaustive-deps
 
     function renderAllUsers () {
-  
-          fetch(url+"/userdata").then((res) => {
+        
+          fetch(url+"/userdata").then((res) => {  
               return res.json();
           }).then((resp) => {
               let userobj = {}
               let allusersnames = [];
+              let cid = sessionStorage.getItem('username');
               if (resp != null) {
   
                   for (let i = 0; i < resp.length; i++) {
-                      userobj['label'] = resp[i]['id']
-                      userobj['value'] = resp[i]['id']
-                      allusersnames.push(userobj);
-                      userobj = {};
+                      if(resp[i]['id']!==cid){
+                        userobj['label'] = resp[i]['id']
+                        userobj['value'] = resp[i]['id']
+                        allusersnames.push(userobj);
+                        userobj = {};
+                      }
                   }
                   setallusers(allusersnames)
-  
-  
               }else{
                   setallusers(allusersnames)
               }
           })   
       }
-
     function renderAllDocs() {
         let id = sessionStorage.getItem('username');
 
@@ -96,6 +92,7 @@ export default function Filemanager() {
                     myobj['id'] = i + 1
                     myobj['filename'] = resp[i]['filename']
                     myobj['Dateandtime'] = resp[i]['savedatetime']
+                    myobj['sendBy'] = resp[i]['sendby']
                     myobj['download'] = <Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(resp[i]['filename'])}>Download</Button>
                     myobj['action'] = <FontAwesomeIcon icon={faTrash} className="ml-1 btn" style={{ cursor: 'pointer' }} onClick={() => Deletefile(resp[i]['fid'])} />
                     myobj['fid'] = resp[i]['fid']
@@ -108,27 +105,88 @@ export default function Filemanager() {
 
                 }
                 setoptions(options)
-                setalldoc(alldocnames)
-
             } else {
                 setoptions(options)
-                setalldoc(alldocnames)
             }
         })
     }
 
     function Onsharefiles() {
-        MySwal.fire({
-            title: <strong>Coming Soon!</strong>,
-            html: <i>currently not working</i>,
-            icon: 'warning'
-        })
 
+        const formData = new FormData();
+        const date = new Date();
+        const options = { timeZone: 'Asia/Kolkata' };
+        const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
+        const inputField = document.getElementById("sharedoc");
+
+        let sendto = selectedUser.value; //"Admin"//sessionStorage.getItem('username');
+        let sendBy = sessionStorage.getItem('username');
+
+        console.log("mydoc",mydoc)
+
+
+        if (document.getElementById("sharedoc").value === '') {
+            MySwal.fire({
+                title: <strong>File not found!</strong>,
+                html: <i>please choose a file to upload</i>,
+                icon: 'warning'
+            })
+        }else if(selectedUser ===''){
+            MySwal.fire({
+                title: <strong>User not found!</strong>,
+                html: <i>please choose a user to share file</i>,
+                icon: 'warning'
+            })
+
+        }else{
+            setSend('Sending...')
+            formData.append(
+                "myFile",
+                mydoc,
+                mydoc.fileName,
+
+            );
+            formData.append('username', sendto);
+            formData.append('savedatetime', formattedDate);
+            formData.append('sendBy',sendBy)
+
+            fetch(url+"/fileupload", {
+                method: "POST",
+                body: formData
+            }).then((res) => {
+                MySwal.fire({
+                    title: <strong>Sent!</strong>,
+                    html: <i>Data Shared Successfully!</i>,
+                    icon: 'success'
+                })
+                inputField.value = '';
+                setSelectedUser('');
+                setSend('Send')
+
+            }).catch((err) => {
+                console.log(err)
+
+            })
+
+        }
     }
 
     function onFileChange(event) {
-
-        setmydoc(event.target.files[0])
+        debugger
+        const inputField = document.getElementById("mydoc");
+        const shareFileInputField = document.getElementById("sharedoc");
+        let filesize = event.target.files[0].size/1048576;
+        if(filesize>1){
+            MySwal.fire({
+                title: <strong>File size Exceeds!</strong>,
+                html: <i>please choose a file of less than 3MB</i>,
+                icon: 'warning'
+            })
+            inputField.value = '';
+            shareFileInputField.value = '';
+        }else{
+            setmydoc(event.target.files[0])
+        }       
     }
 
     function onFileUpload() {
@@ -138,7 +196,7 @@ export default function Filemanager() {
         const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
         const inputField = document.getElementById("mydoc");
         let username = sessionStorage.getItem('username');
-
+        let sendBy = ''
 
         if (document.getElementById("mydoc").value === '') {
             MySwal.fire({
@@ -146,7 +204,7 @@ export default function Filemanager() {
                 html: <i>please choose a file to upload</i>,
                 icon: 'warning'
             })
-        } else {
+        }else {
             setSave('Saving...')
             formData.append(
                 "myFile",
@@ -156,6 +214,7 @@ export default function Filemanager() {
             );
             formData.append('username', username);
             formData.append('savedatetime', formattedDate);
+            formData.append('sendBy',sendBy)
 
             fetch(url+"/fileupload", {
                 method: "POST",
@@ -170,10 +229,7 @@ export default function Filemanager() {
                 console.log(err)
 
             })
-
         }
-
-
     };
 
     function ondownload(filename) {
@@ -280,22 +336,12 @@ export default function Filemanager() {
                                     options={alluserlist}
                                 />
                             </Form.Group>
-                            <Form.Group controlId="formFile" className="col-lg-6">
-                                <h6>files</h6>
-                                <Select
-                                    className="basic-single"
-                                    classNamePrefix="select user"
-                                    isLoading={false}
-                                    isClearable={true}
-                                    isSearchable={true}
-                                    name="files"
-                                    value={selectedOption}
-                                    onChange={handleChange}
-                                    options={alldocslist}
-                                />
-                            </Form.Group>
+                            <Form.Group controlId="formFile" className="mb-3">
+                            <Form.Label>Browse A File To Share</Form.Label>
+                            <Form.Control type="file" id="sharedoc" onChange={onFileChange} />
+                        </Form.Group>
                         </div>
-                        <span><Button className='btn btn-dark my-2' size="" onClick={Onsharefiles}>Send</Button></span>
+                        <span><Button className='btn btn-dark my-2' size="" onClick={Onsharefiles}>{Send}</Button></span>
 
                     </Card.Body>
                 </Card>
@@ -304,7 +350,7 @@ export default function Filemanager() {
 
                 <Card>
                     <Card.Header className='card text-center' style={{ backgroundColor: 'black' }}>
-                        <h4 style={{ color: 'white' }}>List of Uploaded Files</h4>
+                        <h4 style={{ color: 'white' }}>List of Files</h4>
                     </Card.Header>
                 </Card>
 
@@ -323,7 +369,7 @@ export default function Filemanager() {
                             <tr key={option.id}>
                                 <td>{option.id}</td>
                                 <td>{option.filename}</td>
-                                <td>{option.Dateandtime}</td>
+                                <td>{option.Dateandtime}{option.sendBy ? <b><br></br>SentBy: {option.sendBy}</b> : ''}</td>
                                 <td><Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(option.filename)}>Download</Button> </td>
                                 <td> <FontAwesomeIcon icon={faTrash} className="ml-1 btn" style={{ cursor: 'pointer' }} onClick={() => Deletefile(option.fid)} /></td>
                             </tr>
