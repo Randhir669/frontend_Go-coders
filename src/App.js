@@ -30,9 +30,21 @@ function App() {
             </>
         }>
       </Route>
-          <Route path='/TextEditor' element={
+      <Route path='/Filemanager' element={
+        <>
+          <Navbar title="Filemanager" fixed="top" />
+
+          <div className='row'>
+          <Filemanager></Filemanager>
+          </div>
+          <Footer></Footer>
+          
+        </>
+      }>
+      </Route>
+          <Route path='/Notesmanager' element={
             <>
-              <Navbar title="TextEditor" fixed="top" />
+              <Navbar title="Notesmanager" fixed="top" />
 
               <div className='row' style = {{marginBottom:'90px'}}>
               <Textform heading="Enter Text To Analyze"></Textform>
@@ -41,18 +53,7 @@ function App() {
             </>
           }>
           </Route>
-          <Route path='/Filemanager' element={
-            <>
-              <Navbar title="Filemanager" fixed="top" />
-
-              <div className='row'>
-              <Filemanager></Filemanager>
-              </div>
-              <Footer></Footer>
-              
-            </>
-          }>
-          </Route>
+        
           <Route path='/Registration' element={<Registration />}></Route>
           <Route path='/Forget' element={<ForgetPassword />}></Route>
           <Route path='/Game' element={<Game />}></Route>

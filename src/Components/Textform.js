@@ -8,14 +8,9 @@ import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faEdit, faTrash,faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faClock, faEdit, faTrash, faDownload} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-
-
-//import "bootstrap/dist/css/bootstrap.min.css";
-//import "bootstrap/dist/js/bootstrap.bundle.min.js";
-
 
 
 export default function Textform(prop) {
@@ -24,22 +19,20 @@ export default function Textform(prop) {
     const [showSaveButton, setShowSaveButton] = useState(true);
     const [showUpdateButton, setShowUpdateButton] = useState(false);
     const [noOfFiles, setnoOfFiles] = useState(0);
-    //  const [isSelcted, setisSelcted] = useState('');
     const [currentfileid, setcurrentfileid] = useState('');
-  
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [OptionsValue, setoptions] = useState([])
     const usenavigate = useNavigate();
     const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com";
-    //  const url = "http://localhost:8000";
-
-
+  //  const url = "http://localhost:8000";
+  
     useEffect(() => {
 
         var username = sessionStorage.getItem('username');
         let myInput = document.getElementById("welcome");
-        myInput.textContent = "Enter Text To Analyze";
+        myInput.textContent = "Enter Your Notes";
 
         if (username === '' || username === null) {
             usenavigate('/');
@@ -50,10 +43,6 @@ export default function Textform(prop) {
     function renderData() {
 
         let id = sessionStorage.getItem('username');
-      //  const date = new Date();
-     //   const options = { timeZone: 'Asia/Kolkata' };
-       // const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
-
         fetch(url+"/filedata/" + id).then((res) => {
             return res.json();
         }).then((resp) => {
@@ -63,8 +52,7 @@ export default function Textform(prop) {
             if (resp != null) {
                 setnoOfFiles(resp.length)
 
-                for (let i = 0; i < resp.length; i++) {
-                    console.log("resp[i].fileName", resp[i]['fileName'])
+                for (let i = 0; i < resp.length; i++) {                   
                     myobj['value'] = resp[i]['filename']
                     myobj['textcontent'] = resp[i]['filecontent']
                     myobj['datetime'] = resp[i]['savedatetime']
@@ -72,7 +60,7 @@ export default function Textform(prop) {
                     options.push(myobj);
                     myobj = {};
                 }
-                
+
                 options.reverse()
                 setoptions(options)
 
@@ -85,16 +73,6 @@ export default function Textform(prop) {
 
         })
     }
-
-/*    function getfrombackend() {
-
-        fetch("http://localhost:8000/data").then((res) => {
-            return res.json();
-        }).then((resp) => {
-            console.log(resp)
-        })
-
-    }*/
 
     function handleSpeak() {
         if ('speechSynthesis' in window) {
@@ -131,25 +109,34 @@ export default function Textform(prop) {
         document.body.appendChild(element);
         element.click();
 
-     /*   Email.send({
-            Host: "gocoders4u@gmail.com",
-            Username: "gocoders4u@gmail.com",
-            Password: "randhir669@4RKY",
-            To: 'randhir669@gmail.com',
-            From: "gocoders4u@gmail.com",
-            Subject: "Sending Email using javascript",
-            Body: "Well that was easy!!",
-          })
-            .then(function (message) {
-              alert("mail sent successfully")
-            });*/
-
     }
     function handleToCopy() {
 
         var copyText = document.getElementById("mybox");
         copyText.select();
         navigator.clipboard.writeText(copyText.value);
+    }
+
+    function Copycontent(id) {
+
+        var cardTextElement = document.getElementById(id);
+        cardTextElement.style.backgroundColor = '#B4D5FF'
+        var textToCopy = cardTextElement.textContent;
+        var textarea = document.createElement("textarea");
+        textarea.value = textToCopy;
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+
+        document.execCommand("copy");
+
+        document.body.removeChild(textarea);
+        setTimeout(function() {
+            // Code to be executed after the delay
+            cardTextElement.style.backgroundColor = ''
+          }, 2000);
+        console.log("Copied text: " + textToCopy);  
     }
 
     function handleToRemoveSpaces() {
@@ -171,9 +158,7 @@ export default function Textform(prop) {
     }
 
     function validating_filename(action) {
-
         saveto()
-
     }
 
     function save() {
@@ -221,7 +206,7 @@ export default function Textform(prop) {
 
         let filename = ""
         if (showUpdateButton === true) {
-          //  filename = currentfilename;
+            //  filename = currentfilename;
 
             alert("Data Updated")
         } else {
@@ -274,24 +259,24 @@ export default function Textform(prop) {
 
         console.log(textobj)
 
-        
-            fetch(url+"/fileupdate/" + currentfileid, {
-                method: "PUT",
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify(textobj)
-            }).then((res) => {
-                //  alert("Data saved")
-                renderData()
-                alert("file updated")
-            }).catch((err) => {
-                console.log(err)
 
-            })
+        fetch(url+"/fileupdate/" + currentfileid, {
+            method: "PUT",
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(textobj)
+        }).then((res) => {
+            //  alert("Data saved")
+            renderData()
+            alert("file updated")
+        }).catch((err) => {
+            console.log(err)
+
+        })
 
     }
 
     function Deletefile(fileid) {
-     //   alert("file deleted")
+        //   alert("file deleted")
 
         let username = sessionStorage.getItem('username');
         const date = new Date();
@@ -317,38 +302,38 @@ export default function Textform(prop) {
             showCancelButton: true,
             confirmButtonText: "OK",
             cancelButtonText: "Cancel",
-        }).then((result) =>{ 
+        }).then((result) =>{
 
             if (result.isConfirmed){
 
-            fetch(url+"/fileupdate/" + fileid, {
-                method: "PUT",
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify(textobj)
-            }).then((res) => {
-                //  alert("Data saved")
-                renderData()
-    
-            }).catch((err) => {
-                console.log(err)
-    
-            })
-        }else{
+                fetch(url+"/fileupdate/" + fileid, {
+                    method: "PUT",
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify(textobj)
+                }).then((res) => {
+                    //  alert("Data saved")
+                    renderData()
 
-        }
+                }).catch((err) => {
+                    console.log(err)
+
+                })
+            }else{
+
+            }
 
 
-         });
+        });
     }
 
- /*    */
+    /*    */
 
     return (
         <>
             <div className="container mx-3 col-lg-8" style={{ marginleft: '0px' }}>
-                
-            <Card className="roundborder" style={{ boxShadow: '1px 2px 9px #6c757d', margin: '1em', padding: '1em', }}>
-                <div className='row my-3'>
+
+                <Card className="roundborder" style={{ boxShadow: '1px 2px 9px #6c757d', margin: '1em', padding: '1em', }}>
+                    <div className='row my-3'>
                         <div className='col-lg-8'>
                             <h4 id="welcome">" "</h4>
                             <Badge pill bg="info">
@@ -356,7 +341,7 @@ export default function Textform(prop) {
                             </Badge>
 
                         </div>
-                      { /*   <Form.Group controlId="formFileSm" className="mb-3" aria-disabled>
+                        { /*   <Form.Group controlId="formFileSm" className="mb-3" aria-disabled>
                            <span> <Form.Control type="file" id="mydoc" onChange={onFileChange}  size="sm" />
                             <Button className='btn btn-dark' size="sm" onClick={onFileUpload}>Save</Button></span>
                            
@@ -375,10 +360,10 @@ export default function Textform(prop) {
                                 </div>*/}
 
                         <div className='col-lg-1 ml-auto mr-2'>
-                
+
                             <Button className='btn btn-light mx-1' size="sm" onClick={clear}>Reset</Button>
-                            </div>
-                     
+                        </div>
+
                     </div>
 
                     <div className='container'>
@@ -400,22 +385,22 @@ export default function Textform(prop) {
                         </DropdownButton>
                         {showSaveButton && <button className='btn btn-dark mx-2' onClick={save} >Save</button>}
                         {showUpdateButton && <button className='btn btn-dark mx-2 ' onClick={updatefile} >Update</button>}
-                       
+
                     </div>
 
                     <div className='container my-3'>
-                        <h4>Your Text Summary</h4>
+                      {/*  <h4>Your Text Summary</h4>
                         <p>{text.split(" ").length - 1} words and {text.length} characters</p>
-                        <p>{0.008 * text.split(" ").length} Minutes to read</p>
+                        <p>{0.008 * text.split(" ").length} Minutes to read</p>*/}
                     </div>
-                  
+
                 </Card>
 
             </div>
 
 
-            <div className='container col-lg-3 mx-2 scrollable' style={{paddingBottom:'20px'}}>
-             {/*  <div className='row'>
+            <div className='container col-lg-3 mx-2 scrollable' style={{ paddingBottom: '20px' }}>
+                {/*  <div className='row'>
                     <Card  style={{ width: '26rem', boxShadow: '1px 2px 9px #6c757d', margin: '1em' }} className="mb-2 roundborder">
                     <form  className='container margintopbottom'>
                     <div className='card'>
@@ -430,20 +415,21 @@ export default function Textform(prop) {
                 <div className='row '>
                     {OptionsValue.map((option) => (
                         <Card border="dark" style={{ width: '26rem', boxShadow: '1px 2px 9px #6c757d', margin: '1em' }} className="mb-2 cards hover-shadow roundborder ">
-                
-                       
-                        <Card.Header className="d-flex justify-content-between align-items-center">
+
+
+                            <Card.Header className="d-flex justify-content-between align-items-center">
                                 <span><h6>{option.value}</h6></span>
                                 <div className=''>
-                                <FontAwesomeIcon icon={faDownload} className="" style={{ cursor: 'pointer' }} onClick={() => download(option.textcontent,option.value)} />
-                                <FontAwesomeIcon icon={faEdit} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => myfiles(option.id)} />
-                                <FontAwesomeIcon icon={faTrash} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => Deletefile(option.id)} />
+                                    <FontAwesomeIcon icon={faCopy} className=""  style={{cursor: 'pointer' }}  onClick={() => Copycontent(option.id)} />
+                                    <FontAwesomeIcon icon={faDownload} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => download(option.textcontent, option.value)} />
+                                    <FontAwesomeIcon icon={faEdit} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => myfiles(option.id)} />
+                                    <FontAwesomeIcon icon={faTrash} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => Deletefile(option.id)} />
                                 </div>
 
                             </Card.Header>
                             <Card.Body className = "scrollablecardbody">
                                 <Card.Title></Card.Title>
-                                <Card.Text>
+                                <Card.Text id={option.id}>
                                     {option.textcontent}
                                 </Card.Text>
 
@@ -452,8 +438,8 @@ export default function Textform(prop) {
                                 <FontAwesomeIcon icon={faClock} className="" style={{ marginRight: '10px' }} />
                                 {option.datetime}
                             </Card.Footer>
-                           
-                         
+
+
                         </Card>
                     ))}
                 </div>
