@@ -12,33 +12,62 @@ export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-
+    const [showlabel, setshowlabel] = useState(true);
+    const [hidelabel, sethidelabel] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [showpassword, setshowpassword] = useState('password');
     const MySwal = withReactContent(Swal)
     const usenavigate = useNavigate();
+
     const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com"
     //const url = "http://localhost:8000";
 
     useEffect(() => {
         sessionStorage.clear();
+
     }, []);
 
 
     function goToOnchangeUsername(event) {
         setUsername(event.target.value);
+        
+        if(username.length!== 0 && password.length!== 0){
+
+            setIsButtonDisabled(false)
+        }else{
+            setIsButtonDisabled(true)
+        }
     }
+
     function goToOnchangePassword(event) {
         setPassword(event.target.value);
+    
+        if(username.length!== 0 && password.length!==0){
+
+            setIsButtonDisabled(false)
+        }else{
+            setIsButtonDisabled(true)
+        }
+    }
+
+    function ShowPassword(){
+     
+        setshowpassword('text')
+        setshowlabel(false)
+        sethidelabel(true)
+
+    }
+    function hidePassword(){
+     
+        setshowpassword('password')
+        setshowlabel(true)
+        sethidelabel(false)
+
     }
 
     function Spinner() {
         return (
-            /*  <div className="spinner-border" style={{ width: '3rem', height: '3rem',color:'red'}} role="status">
-                <span className="sr-only">Loading...</span>
-              </div>*/
-
             <p>Sign In....</p>
-
-
         );
     }
 
@@ -106,18 +135,21 @@ export default function Login() {
                         </div>
                         <form onSubmit={proceedlogin} className="signin-form card-body">
                             <div className="form-group mt-3 ">
-                                <input type="text" required className="form-control" onChange={goToOnchangeUsername} value={username} />
+                                <input type="text" required className="form-control" onChange={goToOnchangeUsername}  value={username} />
                                 <label className="form-control-placeholder" >Username</label>
 
                             </div>              
                             <div className="form-group ">
-                                <input id="password-field" required type="password" className="form-control" value={password} onChange={goToOnchangePassword} />
+                             {showlabel && <label className="showpass" for = "right-label" style = {{color:'#26e1ead4'}} onClick={ShowPassword}>Show</label>}
+                             {hidelabel && <label className="showpass" for = "right-label" style = {{color:'#26e1ead4'}} onClick={hidePassword}>Hide</label>}
+                                <input id="password-field" required type={showpassword} className="form-control"  value={password} onChange={goToOnchangePassword} />
 
                                 <label className="form-control-placeholder">Password</label>
+
                                 <span toggle="#password-field" className="fa fa-fw fa-eye field-icon toggle-password"></span>
                             </div>
                             <div className="form-group ">
-                                <button type="submit" className="form-control btn btn-dark rounded submit px-3" onClick={proceedlogin}>
+                                <button type="submit" disabled={isButtonDisabled} className="form-control btn btn-dark rounded submit px-3" onClick={proceedlogin}>
                                     {isSubmitting ? <Spinner /> : 'Sign In'}</button>
                             </div>
 

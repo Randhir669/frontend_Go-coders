@@ -134,5 +134,11 @@ html, body {
   position: relative; /* This is needed for the footer to position correctly */
 }
 
+.showpass{
+  position: relative;
+    margin-left: 88%;
+    cursor: pointer;
+}
+
 
 
