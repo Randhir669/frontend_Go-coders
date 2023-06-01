@@ -30,7 +30,7 @@ export default function Login() {
 
     function goToOnchangeUsername(event) {
         setUsername(event.target.value);
-        
+
         if(username.length!== 0 && password.length!== 0){
 
             setIsButtonDisabled(false)
@@ -134,7 +134,7 @@ export default function Login() {
 
                         </div>
                         <form onSubmit={proceedlogin} className="signin-form card-body">
-                            <div className="form-group mt-3 ">
+                            <div className="form-group mt-3 " style={{height:'40px'}}>
                                 <input type="text" required className="form-control" onChange={goToOnchangeUsername}  value={username} />
                                 <label className="form-control-placeholder" >Username</label>
 
