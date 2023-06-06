@@ -24,7 +24,7 @@ const Registration = () => {
     const navigate = useNavigate("")
     const MySwal = withReactContent(Swal)
     const form = useRef();
-    const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com"
+    const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com/"
   //  const url = "http://localhost:8000"
 
     function handletosubmit(e) {
