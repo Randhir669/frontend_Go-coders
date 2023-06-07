@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 //import { ToastContainer, toast } from 'react-toastify';
-//import 'react-toastify/dist/ReactToastify.css';
+//import 'react-toastify/dist/ReactToastify.css'
 import PasswordStrengthBar from 'react-password-strength-bar';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
