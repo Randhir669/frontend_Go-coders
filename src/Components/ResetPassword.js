@@ -60,7 +60,20 @@ export default function ResetPassword() {
         if (e.target.value === '') {
             setshowpassmeter(false)
         }
-        console.log(newPassword)
+
+        let confirmpassword = document.getElementById('confrmpass').value
+        let newpassword = document.getElementById('newpass').value
+
+        if (confirmpassword !== newpassword) {
+            setshowpasserror(true)
+            setshowsubmit(true)
+        }
+
+        if (confirmpassword === newpassword) {
+            setshowpasserror(false)
+            setshowsubmit(false)
+        }
+       
     }
 
 
