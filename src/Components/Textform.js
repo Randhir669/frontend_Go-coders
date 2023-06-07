@@ -25,7 +25,7 @@ export default function Textform(prop) {
     const handleClose = () => setShow(false);
     const [OptionsValue, setoptions] = useState([])
     const usenavigate = useNavigate();
-    const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com";
+    const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
   //  const url = "http://localhost:8000";
   
     useEffect(() => {
