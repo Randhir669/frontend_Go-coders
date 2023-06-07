@@ -1,7 +1,6 @@
 //import logo from './logo.svg';
 import './App.css';
 import Navbar from './Components/Navbar';
-import Game from './Components/Game';
 import Textform from './Components/Textform';
 import Registration from './Components/Registration';
 import ForgetPassword from './Components/ForgetPassword';
@@ -11,6 +10,7 @@ import Login from './Components/Login';
 import Filemanager from './Components/Filemanager';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import ResetPassword from './Components/ResetPassword';
 
 
 
@@ -18,8 +18,8 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 function App() {
  
   return (
-    <div>
-      <BrowserRouter>
+    <div>  
+      <BrowserRouter>      
         <Routes>
           <Route path='/' element={
             <>
@@ -52,11 +52,10 @@ function App() {
               <Footer></Footer>
             </>
           }>
-          </Route>
-        
+          </Route>      
           <Route path='/Registration' element={<Registration />}></Route>
           <Route path='/Forget' element={<ForgetPassword />}></Route>
-          <Route path='/Game' element={<Game />}></Route>
+          <Route path='/ResetPassword' element={<ResetPassword />}></Route>       
         </Routes>
       </BrowserRouter>
     </div>

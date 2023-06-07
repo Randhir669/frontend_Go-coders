@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import Card from 'react-bootstrap/Card';
 import withReactContent from 'sweetalert2-react-content'
+import {faEyeSlash, faEye} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 
@@ -12,15 +14,13 @@ export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showlabel, setshowlabel] = useState(true);
-    const [hidelabel, sethidelabel] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-    const [showpassword, setshowpassword] = useState('password');
+    const [showPassword, setShowPassword] = useState(false);
     const MySwal = withReactContent(Swal)
     const usenavigate = useNavigate();
 
-    const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com"
-    //const url = "http://localhost:8000";
+    const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
+ //   const url = "http://localhost:8000";
 
     useEffect(() => {
         sessionStorage.clear();
@@ -50,21 +50,6 @@ export default function Login() {
         }
     }
 
-    function ShowPassword(){
-     
-        setshowpassword('text')
-        setshowlabel(false)
-        sethidelabel(true)
-
-    }
-    function hidePassword(){
-     
-        setshowpassword('password')
-        setshowlabel(true)
-        sethidelabel(false)
-
-    }
-
     function Spinner() {
         return (
             <p>Sign In....</p>
@@ -74,6 +59,15 @@ export default function Login() {
     function signup(params) {
         // href="Registration"
         usenavigate('/Registration')
+    }
+     
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+    
+    function forgetpassword(params) {
+        // href="Registration"
+        usenavigate('/Forget')
     }
 
     const proceedlogin = (e) => {
@@ -86,7 +80,6 @@ export default function Login() {
             if(resp==null){
                 resp = {}
             }
-            console.log(password)
             if (Object.keys(resp).length === 0|| resp === null) {
                 MySwal.fire({
                     title: <strong>UserName Not Exist</strong>,
@@ -134,19 +127,23 @@ export default function Login() {
 
                         </div>
                         <form onSubmit={proceedlogin} className="signin-form card-body">
-                            <div className="form-group mt-3 " style={{height:'40px'}}>
-                                <input type="text" required className="form-control" onChange={goToOnchangeUsername}  value={username} />
+                            <div className="form-group mt-3 " style={{height:''}}>
                                 <label className="form-control-placeholder" >Username</label>
+                                <input type="text" style = {{width: '99%'}} required className="form-control" onChange={goToOnchangeUsername}  value={username} />
+                                
 
                             </div>              
                             <div className="form-group ">
-                             {showlabel && <label className="showpass" for = "right-label" style = {{color:'#26e1ead4'}} onClick={ShowPassword}>Show</label>}
-                             {hidelabel && <label className="showpass" for = "right-label" style = {{color:'#26e1ead4'}} onClick={hidePassword}>Hide</label>}
-                                <input id="password-field" required type={showpassword} className="form-control"  value={password} onChange={goToOnchangePassword} />
-
-                                <label className="form-control-placeholder">Password</label>
-
-                                <span toggle="#password-field" className="fa fa-fw fa-eye field-icon toggle-password"></span>
+                            <label className="form-control-placeholder">Password</label>
+                            <div className = "input-group-append" style={{ display: 'flex', alignItems: 'center',width: '104%' }}>
+                             <input id="password-field" required type={showPassword ? 'text':'password'} className="form-control"  value={password} onChange={goToOnchangePassword} />
+                              <FontAwesomeIcon style = {{position: 'relative' , right: '23px', cursor:'pointer'}}
+                              icon={showPassword ? faEyeSlash : faEye}
+                              className="eye-icon"
+                              onClick={toggleShowPassword}
+                            />
+                            </div>
+                              
                             </div>
                             <div className="form-group ">
                                 <button type="submit" disabled={isButtonDisabled} className="form-control btn btn-dark rounded submit px-3" onClick={proceedlogin}>
@@ -155,7 +152,7 @@ export default function Login() {
 
                         </form>
                         <div className="card-footer text-center">
-                            <a className='btn btn-light' href='/'>Forget Password</a>
+                            <button type = "button"  className='btn btn-light' onClick={forgetpassword}>Forget Password</button>
                             <button type="submit" className='btn mx-2' onClick={signup} style={{ color: 'blue' }}>Sign UP</button>
                         </div>
 

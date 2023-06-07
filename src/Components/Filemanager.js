@@ -26,7 +26,7 @@ export default function Filemanager() {
     const [Send, setSend] = useState('Send')
 
     const [selectedUser, setSelectedUser] = useState('');
-     const url = "https://owcylo27c7.execute-api.us-east-1.amazonaws.com";
+     const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
     // const url = "http://localhost:8000";
 
 
