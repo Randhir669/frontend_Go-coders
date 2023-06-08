@@ -1,47 +1,42 @@
 import React from 'react'
+import Card from 'react-bootstrap/Card';
+
 
 export default function About() {
   return (
-    <div>
-    <div class="accordion" id="accordionPanelsStayOpenExample">
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-          Accordion Item #1
-        </button>
-      </h2>
-      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-        <div class="accordion-body">
-          <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-        </div>
-      </div>
+    <div className='offset-lg-1 col-lg-10'>
+
+      <Card className="card" style={{ boxShadow: '1px 2px 9px #6c757d', marginTop: '50px', marginBottom: '15px' }}>
+        <form className='container margintopbottom'>
+          <div className='card'>
+            <div className="card-header">
+              <div className="w-100">
+                <h3 className="text-center ">Go-Coders</h3>
+              </div>
+
+            </div>
+            <form className="signin-form card-body">
+
+              <h5>
+                I'm thrilled to announce the launch of www.go-coders.com, a platform designed to simplify file management and enhance productivity. With our platform, you can easily store and download your files, making it convenient to access your important documents anytime, anywhere.<br></br><br></br>
+
+                But that's not all! We've taken it a step further by enabling seamless file sharing with other go-coders users. Collaborate effortlessly by sharing files with colleagues, friends, or family, ensuring smooth communication and efficient teamwork.<br></br><br></br>
+
+                Additionally, www.go-coders.com offers a unique feature that allows you to save personal notes. Whether it's capturing ideas, jotting down reminders, or organizing your thoughts, our platform ensures that your notes are securely stored and readily available whenever you need them.<br></br><br></br>
+
+                At www.go-coders.com, we're passionate about empowering individuals and teams to optimize their workflow and achieve more. Our user-friendly interface and robust functionality make managing files and notes a breeze.<br></br><br></br>
+
+                join us on this exciting journey! Visit www.go-coders.com today and experience the convenience and efficiency it offers. Feel free to reach out if you have any questions or feedback. Together, let's unlock your full potential!
+
+
+              </h5>
+            </form>
+
+
+          </div>
+        </form>
+      </Card>
     </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-          Accordion Item #2
-        </button>
-      </h2>
-      <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-        <div class="accordion-body">
-          <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-        </div>
-      </div>
-    </div>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-          Accordion Item #3
-        </button>
-      </h2>
-      <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-        <div class="accordion-body">
-          <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-        </div>
-      </div>
-    </div>
-  </div>
-      
-    </div>
-  )
+  );
+
 }

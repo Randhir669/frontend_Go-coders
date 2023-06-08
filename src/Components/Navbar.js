@@ -27,14 +27,29 @@ export default function Navbar(prop) {
   function logout() {
     usenavigate('/')
   }
+
+  function Filemanager() {
+    usenavigate('/Filemanager')
+  }
+
+  function About() {
+    usenavigate('/About')
+  }
+
+  function Notesmanager() {
+    usenavigate('/Notesmanager')
+  }
+
+
+
   return (
     <div>
     
       <nav className="navbar navbar-expand-lg  bg-dark">
           
-      <Button className="nav-link btn btn-dark navbar-brand" href="/Filemanager" >File Manager <span className="sr-only">(current)</span></Button>
-      <Button className="nav-link btn btn-dark navbar-brand " href="/Notesmanager" style={{ color: 'white' }}>Notes Manager</Button>
-      <Button className="nav-link btn btn-dark" href="#" >About<span className="sr-only">(current)</span></Button>
+      <Button className="nav-link btn btn-dark navbar-brand"  onClick={Filemanager}>File Manager <span className="sr-only">(current)</span></Button>
+      <Button className="nav-link btn btn-dark navbar-brand " onClick={Notesmanager} style={{ color: 'white' }}>Notes Manager</Button>
+      <Button className="nav-link btn btn-dark navbar-brand"  onClick={About}>About<span className="sr-only">(current)</span></Button>
             <form className="d-flex ml-auto">
             <DropdownButton  className="roundborder btn" variant ="light" title={user}>
             <Dropdown.Item as="button" variant="dark" menuVariant="dark" onClick={logout}>Logout</Dropdown.Item>
