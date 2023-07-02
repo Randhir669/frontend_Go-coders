@@ -5,6 +5,9 @@ import Card from 'react-bootstrap/Card';
 import withReactContent from 'sweetalert2-react-content'
 import {faEyeSlash, faEye} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {auth,provider} from './Firebase';
+import { signInWithPopup } from 'firebase/auth';
+import GoogleButton from 'react-google-button';
 
 
 
@@ -26,6 +29,17 @@ export default function Login() {
         sessionStorage.clear();
 
     }, []);
+
+    function googleauth(){
+
+        signInWithPopup(auth,provider).then((data)=>{
+
+            sessionStorage.setItem('username', data.user.email)
+          
+            usenavigate('/Filemanager')
+
+        })
+    }
 
 
     function goToOnchangeUsername(event) {
@@ -154,6 +168,9 @@ export default function Login() {
                         <div className="card-footer text-center">
                             <button type = "button"  className='btn btn-light' onClick={forgetpassword}>Forget Password</button>
                             <button type="submit" className='btn mx-2' onClick={signup} style={{ color: 'blue' }}>Sign UP</button>
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <GoogleButton classname="px-3 googlebutton" type = 'light' onClick={googleauth}></GoogleButton>
+                         </div>
                         </div>
 
                     </div>

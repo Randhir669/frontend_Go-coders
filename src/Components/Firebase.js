@@ -1,28 +1,23 @@
-//import firebase from 'firebase/app';
-import * as firebase from 'firebase/app'
-//import { initializeApp, getApps } from 'firebase/app';
 import { initializeApp } from "firebase/app";
+import {getAuth,GoogleAuthProvider} from "firebase/auth"
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyAcjiv3MxWrkUh8cMjlBt4v4XFuiJ4P0F4",
-    authDomain: "authuser-31a1c.firebaseapp.com",
-    projectId: "authuser-31a1c",
-    storageBucket: "authuser-31a1c.appspot.com",
-    messagingSenderId: "749837642803",
-    appId: "1:749837642803:web:c48e96178c1efabad20746"
+  apiKey: "AIzaSyCfr7up74omfQ0G0kAm7wJE1afkk0kxxis",
+  authDomain: "gocoders-auth.firebaseapp.com",
+  projectId: "gocoders-auth",
+  storageBucket: "gocoders-auth.appspot.com",
+  messagingSenderId: "580363060986",
+  appId: "1:580363060986:web:4680d22f9485c2d28dab43",
+  measurementId: "G-ZMEWM1BV5C"
+};
 
-}
-//console.log("firebase started")
-/*firebase.initializeApp({
-    apiKey: "AIzaSyCUDNGu61LCRar4kbRbu6ZyFX9H9kXcvEo",
-    authDomain: "fir-react-3bc66.firebaseapp.com",
-    projectId: "fir-react-3bc66",
-
-
-});*/
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app)
+const provider = new GoogleAuthProvider();
 
-
-
-export default firebase; 
+export {auth,provider};
