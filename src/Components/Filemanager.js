@@ -512,25 +512,7 @@ export default function Filemanager() {
         })
 
     }
-
-    let obj = {
-        list: "Test"
-      };
-      const [todo, settodo] = useState([obj]);
     
-      function handletoaddTodo () {
-        let element = document.getElementById("todo");
-        let value = element.value;
-        let temp = todo;
-        let obj = {
-          list: value
-        };
-    
-        temp.push(obj);
-    
-        settodo(temp);
-    }
-
     return (
         <>
             <div className="container mx-3 col-lg-5 my-5" style={{ marginleft: '0px' }}>
@@ -650,20 +632,6 @@ export default function Filemanager() {
 
             </div>
             <div className="container mx-3 col-lg-6 margintopbottom" style={{ marginleft: '0px' }}>
-
-                <input
-                    className="formControl"
-                    id="todo"
-                    type="text"
-                    placeholder="Todo"
-                ></input>
-                <button style={{ marginLeft: "5px" }} onClick={handletoaddTodo}>
-                    Add
-                </button>
-                {todo.map((option) => (
-                    <ul>{option.list}</ul>
-                ))}
-
             </div>
         </>
     )
