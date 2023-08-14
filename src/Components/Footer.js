@@ -1,8 +1,4 @@
 import React from 'react'
-import styles from './Footer.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAddressCard} from '@fortawesome/free-solid-svg-icons';
-
 
 export default function Footer() {
   return (
