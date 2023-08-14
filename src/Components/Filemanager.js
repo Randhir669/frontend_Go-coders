@@ -266,9 +266,6 @@ export default function Filemanager() {
         let sendto = selectedUser.value; //"Admin"//sessionStorage.getItem('username');
         let sendBy = sessionStorage.getItem('username');
 
-
-
-
         if (document.getElementById("sharedoc").value === '') {
             MySwal.fire({
                 title: <strong>File not found!</strong>,
@@ -386,8 +383,8 @@ export default function Filemanager() {
                 }).then((res) => {
                     console.log("Data Upload Successfully")
                     inputField.value = '';
-                    //   renderAllDocs()
-                    //   setSave('Save')
+                      renderAllDocs()
+                       setSave('Save')
 
                 }).catch((err) => {
                     console.log(err)
@@ -395,8 +392,8 @@ export default function Filemanager() {
                 })
             }
         }
-        renderAllDocs()
-        setSave('Save')
+     //   renderAllDocs()
+      //  setSave('Save')
     }
 
     function ondownload(filename) {
