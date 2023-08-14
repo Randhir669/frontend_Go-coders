@@ -17,7 +17,7 @@ export default function Footer() {
           <h4>Quick links</h4>
           <p><a href="/">Login</a></p>
           <p><a href="/registration">Signup</a></p>
-          <p><a href="#">About</a></p>
+          <p>About</p>
         </div>
         <div class="details">
           <h4 class="address">Address</h4>
