@@ -27,7 +27,9 @@ function App() {
             <div className='row' style = {{marginBottom:'90px'}}>
             <Login />
             </div>
+            <div>
             <Footer></Footer>
+            </div>
             </>
         }>
       </Route>
@@ -68,6 +70,9 @@ function App() {
           <Route path='/Registration' element={
             <>
             <Registration />
+            <div>
+            <Footer></Footer>
+            </div>
            
             </>
         }>

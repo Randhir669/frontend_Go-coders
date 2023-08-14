@@ -23,7 +23,7 @@ export default function Login() {
     const usenavigate = useNavigate();
 
     const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
- //   const url = "http://localhost:8000";
+   // const url = "http://localhost:8000";
 
     useEffect(() => {
         sessionStorage.clear();
@@ -107,6 +107,7 @@ export default function Login() {
                     //   alert("SignIn Success")
                     sessionStorage.setItem('name', resp.name)
                     sessionStorage.setItem('username', username)
+                    sessionStorage.setItem('email', resp[0].email)
                     setIsSubmitting(false);
                     usenavigate('/Filemanager')
 

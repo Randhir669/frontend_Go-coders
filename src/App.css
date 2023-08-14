@@ -219,4 +219,9 @@ footer hr {
   }
 }
 
+.dropdown-item.disabled{
+  color:black!important;
+  cursor: default !important;
+}
+
 

@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy, faClock, faEdit, faTrash, faDownload} from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faClock, faEdit, faTrash, faDownload, faStar } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
@@ -25,9 +25,10 @@ export default function Textform(prop) {
     const handleClose = () => setShow(false);
     const [OptionsValue, setoptions] = useState([])
     const usenavigate = useNavigate();
-    const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
-  //  const url = "http://localhost:8000";
-  
+    //  const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
+    const url = "http://localhost:8000";
+
+
     useEffect(() => {
 
         var username = sessionStorage.getItem('username');
@@ -42,8 +43,18 @@ export default function Textform(prop) {
 
     function renderData() {
 
+        var starredbtnElement = document.getElementById('starrednotes');
+        starredbtnElement.style.backgroundColor = ''
+        starredbtnElement.style.color = ''
+
+        var allbtnElement = document.getElementById('allnotes');
+        allbtnElement.style.backgroundColor = '#28a745'
+        allbtnElement.style.color = 'white'
+
+
+
         let id = sessionStorage.getItem('username');
-        fetch(url+"/filedata/" + id).then((res) => {
+        fetch(url + "/filedata/" + id).then((res) => {
             return res.json();
         }).then((resp) => {
             let myobj = {}
@@ -52,11 +63,12 @@ export default function Textform(prop) {
             if (resp != null) {
                 setnoOfFiles(resp.length)
 
-                for (let i = 0; i < resp.length; i++) {                   
+                for (let i = 0; i < resp.length; i++) {
                     myobj['value'] = resp[i]['filename']
                     myobj['textcontent'] = resp[i]['filecontent']
                     myobj['datetime'] = resp[i]['savedatetime']
                     myobj['id'] = resp[i]['uuid']
+                    myobj['isstarred'] = resp[i]['isstarred']
                     options.push(myobj);
                     myobj = {};
                 }
@@ -72,6 +84,36 @@ export default function Textform(prop) {
             }
 
         })
+    }
+
+    function showstarred() {
+        
+        var starredbtnElement = document.getElementById('starrednotes');
+        starredbtnElement.style.backgroundColor = '#28a745'
+        starredbtnElement.style.color = 'white'
+
+        var allbtnElement = document.getElementById('allnotes');
+        allbtnElement.style.backgroundColor = ''
+        allbtnElement.style.color = ''
+
+        let myobj = {}
+        let options = [];
+
+        for (let i = 0; i < OptionsValue.length; i++) {
+
+            if(OptionsValue[i]['isstarred']){
+                myobj['value'] = OptionsValue[i]['value']
+                myobj['textcontent'] = OptionsValue[i]['textcontent']
+                myobj['datetime'] = OptionsValue[i]['datetime']
+                myobj['id'] = OptionsValue[i]['id']
+                myobj['isstarred'] = OptionsValue[i]['isstarred']
+                options.push(myobj);
+                myobj = {};
+
+            }
+
+        }
+        setoptions(options)
     }
 
     function handleSpeak() {
@@ -99,13 +141,13 @@ export default function Textform(prop) {
         setText(newText);
     }
 
-    function download(content,filename) {
+    function download(content, filename) {
 
         const element = document.createElement("a");
         const file = new Blob([content],
             { type: 'text/plain;charset=utf-8' });
         element.href = URL.createObjectURL(file);
-        element.download = filename +'.txt';
+        element.download = filename + '.txt';
         document.body.appendChild(element);
         element.click();
 
@@ -132,11 +174,11 @@ export default function Textform(prop) {
         document.execCommand("copy");
 
         document.body.removeChild(textarea);
-        setTimeout(function() {
+        setTimeout(function () {
             // Code to be executed after the delay
             cardTextElement.style.backgroundColor = ''
-          }, 2000);
-        console.log("Copied text: " + textToCopy);  
+        }, 2000);
+        console.log("Copied text: " + textToCopy);
     }
 
     function handleToRemoveSpaces() {
@@ -172,7 +214,7 @@ export default function Textform(prop) {
         if (fileid !== 'My Files') {
 
             let id = sessionStorage.getItem('username');
-            fetch(url+"/filedata/" + id).then((res) => {
+            fetch(url + "/filedata/" + id).then((res) => {
                 return res.json();
             }).then((resp) => {
                 console.log(resp)
@@ -219,17 +261,18 @@ export default function Textform(prop) {
         const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
 
         let textobj = {
-            "uuid": parseInt(new Date().toISOString().replace(/[-T:Z]/g,"")),
+            "uuid": parseInt(new Date().toISOString().replace(/[-T:Z]/g, "")),
             "userid": 669,
             "filename": filename,
             "filecontent": text,
             "savedate": formattedDate,
             "filestatus": true,
             "username": username,
-            "savedatetime": formattedDate
+            "savedatetime": formattedDate,
+            "isstarred": false,
         }
 
-        fetch(url+"/filedata", {
+        fetch(url + "/filedata", {
             method: "POST",
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(textobj)
@@ -255,12 +298,13 @@ export default function Textform(prop) {
             "filestatus": true,
             "username": username,
             "savedatetime": formattedDate
+
         }
 
         console.log(textobj)
 
 
-        fetch(url+"/fileupdate/" + currentfileid, {
+        fetch(url + "/fileupdate/" + currentfileid, {
             method: "PUT",
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(textobj)
@@ -302,11 +346,11 @@ export default function Textform(prop) {
             showCancelButton: true,
             confirmButtonText: "OK",
             cancelButtonText: "Cancel",
-        }).then((result) =>{
+        }).then((result) => {
 
-            if (result.isConfirmed){
+            if (result.isConfirmed) {
 
-                fetch(url+"/fileupdate/" + fileid, {
+                fetch(url + "/fileupdate/" + fileid, {
                     method: "PUT",
                     headers: { 'content-type': 'application/json' },
                     body: JSON.stringify(textobj)
@@ -318,12 +362,33 @@ export default function Textform(prop) {
                     console.log(err)
 
                 })
-            }else{
+            } else {
 
             }
 
 
         });
+    }
+
+    function toggleStarred(fileid, status) {
+
+        let username = sessionStorage.getItem('username');
+        let textobj = {
+            "username": username,
+            "isstarred": !status
+        }
+
+        fetch(url + "/isstarred/" + fileid, {
+            method: "PUT",
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(textobj)
+        }).then((res) => {
+            renderData()
+        }).catch((err) => {
+            console.log(err)
+
+        })
+
     }
 
     /*    */
@@ -389,7 +454,7 @@ export default function Textform(prop) {
                     </div>
 
                     <div className='container my-3'>
-                      {/*  <h4>Your Text Summary</h4>
+                        {/*  <h4>Your Text Summary</h4>
                         <p>{text.split(" ").length - 1} words and {text.length} characters</p>
                         <p>{0.008 * text.split(" ").length} Minutes to read</p>*/}
                     </div>
@@ -398,8 +463,8 @@ export default function Textform(prop) {
 
             </div>
 
-
-            <div className='container col-lg-3 mx-2 scrollable' style={{ paddingBottom: '20px' }}>
+             
+            <div className='container col-lg-3 mx-2 ' style={{ paddingBottom: '20px' }}>
                 {/*  <div className='row'>
                     <Card  style={{ width: '26rem', boxShadow: '1px 2px 9px #6c757d', margin: '1em' }} className="mb-2 roundborder">
                     <form  className='container margintopbottom'>
@@ -412,24 +477,24 @@ export default function Textform(prop) {
                     </Card>
                        
                             </div>*/}
-                <div className='row '>
+                    <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id = 'allnotes' style={{ backgroundColor: '#28a745', color: 'white' }} onClick = {renderData} >All</Button>
+                    <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id = 'starrednotes' onClick = {showstarred}>Starred</Button>
+                <div className='row scrollable'>
                     {OptionsValue.map((option) => (
                         <Card border="dark" style={{ width: '26rem', boxShadow: '1px 2px 9px #6c757d', margin: '1em' }} className="mb-2 cards hover-shadow roundborder ">
-
-
                             <Card.Header className="d-flex justify-content-between align-items-center">
                                 <span><h6>{option.value}</h6></span>
                                 <div className=''>
-                                    <FontAwesomeIcon icon={faCopy} className=""  style={{cursor: 'pointer' }}  onClick={() => Copycontent(option.id)} />
+                                    <FontAwesomeIcon icon={faCopy} className="" style={{ cursor: 'pointer' }} onClick={() => Copycontent(option.id)} />
                                     <FontAwesomeIcon icon={faDownload} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => download(option.textcontent, option.value)} />
                                     <FontAwesomeIcon icon={faEdit} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => myfiles(option.id)} />
                                     <FontAwesomeIcon icon={faTrash} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => Deletefile(option.id)} />
                                 </div>
 
                             </Card.Header>
-                            <Card.Body className = "scrollablecardbody">
+                            <Card.Body className="scrollablecardbody">
                                 <Card.Title></Card.Title>
-                                <Card.Text id={option.id}>
+                                <Card.Text >
                                     {option.textcontent}
                                 </Card.Text>
 
@@ -437,9 +502,8 @@ export default function Textform(prop) {
                             <Card.Footer className="justify-content-between align-items-center">
                                 <FontAwesomeIcon icon={faClock} className="" style={{ marginRight: '10px' }} />
                                 {option.datetime}
+                                <FontAwesomeIcon icon={faStar} onClick={() => toggleStarred(option.id, option.isstarred)} style={{ cursor: 'pointer', marginLeft: '100px' }} color={option.isstarred ? 'gold' : 'grey'} />
                             </Card.Footer>
-
-
                         </Card>
                     ))}
                 </div>
@@ -473,12 +537,7 @@ export default function Textform(prop) {
                 </Modal.Footer>
             </Modal>
             <div>
-
-
             </div>
-
-
-
         </>
 
     )
