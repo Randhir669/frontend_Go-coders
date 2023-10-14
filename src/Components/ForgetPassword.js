@@ -18,8 +18,8 @@ export default function ForgetPassword() {
   const navigate = useNavigate('')
   const MySwal = withReactContent(Swal)
 
-  const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
-  //const url = "http://localhost:8000";
+  //const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
+  const url = "http://localhost:8000";
 
 
   function backtologin() {

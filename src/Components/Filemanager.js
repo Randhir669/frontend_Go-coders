@@ -18,6 +18,7 @@ export default function Filemanager() {
     const [myalldoc, setmyalldoc] = useState([]);
     const usenavigate = useNavigate();
     const [OptionsValue, setoptions] = useState([])
+    const [AllFiles, setfiles] = useState([])
     const [historyOptionsValue, setoptionsofhistory] = useState([])
     const [alluserlist, setallusers] = useState([])
     const MySwal = withReactContent(Swal)
@@ -25,10 +26,11 @@ export default function Filemanager() {
     const [showfiles, setShowFiles] = useState(true)
     const [showfilesHistory, setShowHistory] = useState(false)
     const [Send, setSend] = useState('Send')
+    const[SearchQuery,setSearchQuery] = useState('')
 
     const [selectedUser, setSelectedUser] = useState('');
-    const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
-    // const url = "http://localhost:8000";
+    //const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
+     const url = "http://localhost:8000";
 
 
     const handleChangeUser = (selectedUser) => {
@@ -58,7 +60,7 @@ export default function Filemanager() {
         renderAllDocs()
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
+  /*  useEffect(() => {
         let timeoutId = setTimeout(logout, 600000);
         console.log(timeoutId) 
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
@@ -66,7 +68,40 @@ export default function Filemanager() {
     function logout() {
           usenavigate('/');
 
-    }
+    }*/
+
+    
+    const [idleTime, setIdleTime] = useState(0);
+
+    useEffect(() => {
+        let intervalId;
+
+        const resetIdleTime = () => {
+            setIdleTime(0);
+        };
+
+        const handleMouseMove = () => {
+            resetIdleTime();
+        };
+
+        const handleTimeout = () => {
+            usenavigate('/'); // Logout action
+        };
+
+        intervalId = setInterval(() => {
+            setIdleTime(prevIdleTime => prevIdleTime + 1);
+            if (idleTime >= 2 * 60) { // 5 minutes * 60 seconds
+                handleTimeout();
+            }
+        }, 1000); // 1-second interval
+
+        document.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+            clearInterval(intervalId);
+            document.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, [idleTime, usenavigate]);
 
 
     function Showfiles() {
@@ -160,8 +195,10 @@ export default function Filemanager() {
 
                 }
                 setoptions(options)
+                setfiles(options)
             } else {
                 setoptions(options)
+                setfiles(options)
             }
         })
     }
@@ -509,6 +546,25 @@ export default function Filemanager() {
         })
 
     }
+
+    function filterFiles(event){
+        debugger
+        const searchText = event.target.value;
+        setSearchQuery(searchText);
+         // Update the search query state
+        if(searchText!=""){
+            const filteredFiles = AllFiles.filter(file =>
+                file.filename.toLowerCase().includes(searchText.toLowerCase())
+            );
+              console.log(filteredFiles);
+              setoptions(filteredFiles)
+        }else{
+            console.log(OptionsValue);
+            setoptions(AllFiles)
+        }
+       
+
+    }
     
     return (
         <>
@@ -565,8 +621,12 @@ export default function Filemanager() {
                             <Button className='btn my-2' variant="outline-success" id='starred' onClick={renderStarredDocs}>Starred</Button>
                             <Button className='btn my-2 ml-2' variant="outline-success" id='files' style={{ backgroundColor: '#28a745', color: 'white' }} onClick={Showfiles}>Files</Button>
                             <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id='history' onClick={ShowfilesHistory}>History</Button>
+
                         </div>
-                        {/*  <h4 style={{ color: 'white' }}>List of Files</h4>*/}
+                        <div style={{ display: 'flex', justifyContent: 'right' ,width:'25%'}}>
+                        <input  className="form-control" variant="outline-success" value = {SearchQuery} type="search" onChange={filterFiles} placeholder="Search" aria-label="Search"/>
+
+                        </div>
                     </Card.Header>
                 </Card>
 

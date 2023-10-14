@@ -511,9 +511,7 @@ export default function Textform(prop) {
 
 
             <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-
-                </Modal.Header>
+               
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3">

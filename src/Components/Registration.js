@@ -22,15 +22,15 @@ const Registration = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showpassmeter, setshowpassmeter] = useState(false);
     const [newPassword, setnewPassword] = useState('');
-    const [showregisterbutton,setshowregisterbutton]=useState(true)
-    const [showloadingbutton,setshowloadingbutton]=useState(false)
+    const [showregisterbutton, setshowregisterbutton] = useState(true)
+    const [showloadingbutton, setshowloadingbutton] = useState(false)
 
 
     const navigate = useNavigate("")
     const MySwal = withReactContent(Swal)
     const form = useRef();
-       const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
-    //   const url = "http://localhost:8000";
+    //   const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
+    const url = "http://localhost:8000";
 
     function onchangePassword(e) {
         setnewPassword(e.target.value)
@@ -52,7 +52,7 @@ const Registration = () => {
                 icon: 'warning'
             })
             setshowregisterbutton(true)
-        setshowloadingbutton(false)
+            setshowloadingbutton(false)
         } else {
 
             fetch(url + "/userdata").then((res) => {
@@ -158,7 +158,7 @@ const Registration = () => {
 
     }
 
-  
+
     function switchverify(e) {
         idchange(e.target.value)
         let myInput = document.getElementById("verify");
@@ -265,6 +265,16 @@ const Registration = () => {
                                                 <option value="india">India</option>
                                                 <option value="usa">USA</option>
                                                 <option value="singapore">Singapore</option>
+                                                <option value="australia">Australia</option>
+                                                <option value="canada">Canada</option>
+                                                <option value="united-kingdom">United Kingdom</option>
+                                                <option value="germany">Germany</option>
+                                                <option value="france">France</option>
+                                                <option value="japan">Japan</option>
+                                                <option value="china">China</option>
+                                                <option value="italy">Italy</option>
+                                                <option value="brazil">Brazil</option>
+                                                <option value="south-africa">South Africa</option>
 
                                             </select>
                                         </div>
@@ -292,8 +302,8 @@ const Registration = () => {
 
                             </div>
                             <div className='card-footer'>
-                               {showregisterbutton && <button type="button" className='btn btn-dark mx-2' onClick={emailValidation}>Register</button>}
-                             {showloadingbutton  && <button class="btn btn-dark mx-2" type="button" disabled>
+                                {showregisterbutton && <button type="button" className='btn btn-dark mx-2' onClick={emailValidation}>Register</button>}
+                                {showloadingbutton && <button class="btn btn-dark mx-2" type="button" disabled>
                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     &nbsp;Register
                                 </button>}
