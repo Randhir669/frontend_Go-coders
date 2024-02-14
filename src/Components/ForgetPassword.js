@@ -1,6 +1,6 @@
 
 
-import React, { useRef,useState } from 'react';
+import React, { useRef, useState } from 'react';
 import emailjs from 'emailjs-com';
 import { useNavigate } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
@@ -18,80 +18,70 @@ export default function ForgetPassword() {
   const navigate = useNavigate('')
   const MySwal = withReactContent(Swal)
 
-  //const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
-  const url = "http://localhost:8000";
+  const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
+  //const url = "http://localhost:8000";
 
 
   function backtologin() {
     navigate('/')
   }
 
-
-
-  function verifyemail() {
+  async function verifyemail() {
 
     setshowsubmitbutton(false)
     setshowloadingbutton(true)
-
-    fetch(url + "/userdata").then((res) => {
-      return res.json();
-    }).then((resp) => {
-      var flag = "Email not found"
-      var fullname, user
-      let email = document.getElementById('resetemail').value
-      debugger
-      if (resp != null) {
-        for (let i = 0; i < resp.length; i++) {
-          if (resp[i]['email'] === email) {
-            user = resp[i]['id']
-            fullname = resp[i]['name']
-            flag = "Email Found"
-            break;
-          }
-        }
-        if (flag === "Email not found") {
-          MySwal.fire({
-            title: <strong>Email Not Found</strong>,
-            html: <i>Please Enter valid email</i>,
-            icon: 'warning'
-          })
-          setshowsubmitbutton(true)
-          setshowloadingbutton(false)
-        } else {
-          let email = document.getElementById('resetemail').value
-          debugger
-          var template_params = {
-            'to_email': email,
-            'fullname': fullname,
-            'user': user
-          };
-
-          emailjs.send('service_ow9fq7m', 'template_mchvy5g', template_params, 'mOAC_5gkWPHi4RVjh')
-            .then((result) => {
-              console.log(result.text);
-              MySwal.fire({
-                title: <strong>Reset Link Sent!</strong>,
-                html: <i>Reset Link Sent to your email,please check your inbox to continue.</i>,
-                icon: 'success'
-              })
-              setshowsubmitbutton(true)
-              setshowloadingbutton(false)
-            }, (error) => {
-              console.log(error.text);
-              setshowsubmitbutton(true)
-              setshowloadingbutton(false)
-            });
-
-        }
-
-        console.log(flag)
-      } else {
-        console.log(flag)
-        //  setallusers(allusersnames)
+    try {
+      let response = await fetch(url + "/userdata")
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
       }
-
-    })
+      let resp = await response.json()
+      let fullname, user
+      let email = document.getElementById('resetemail').value
+      let filtereddata = resp.filter((res) => res.email === email)
+      if (filtereddata.length !== 0) {
+        user = filtereddata[0].id
+        fullname = filtereddata[0].name
+        triggeremail(fullname, user)
+      } else {
+        MySwal.fire({
+          title: <strong>Email Not Found</strong>,
+          html: <i>Please Enter valid email</i>,
+          icon: 'warning'
+        })
+      }
+      setshowsubmitbutton(true)
+      setshowloadingbutton(false)
+    } catch (error) {
+      console.log(error)
+    }
   }
+
+  function triggeremail(fullname, user) {
+
+    let email = document.getElementById('resetemail').value
+    var template_params = {
+      'to_email': email,
+      'fullname': fullname,
+      'user': user
+    };
+    emailjs.send('service_ow9fq7m', 'template_mchvy5g', template_params, 'mOAC_5gkWPHi4RVjh')
+      .then((result) => {
+        console.log(result.text);
+        MySwal.fire({
+          title: <strong>Reset Link Sent!</strong>,
+          html: <i>Reset Link Sent to your email,please check your inbox to continue.</i>,
+          icon: 'success'
+        })
+      }, (error) => {
+        console.log(error.text);
+
+      });
+    setshowsubmitbutton(true)
+    setshowloadingbutton(false)
+  }
+
+
 
   return (
 
