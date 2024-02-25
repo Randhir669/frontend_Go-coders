@@ -25,8 +25,8 @@ export default function Textform(prop) {
     const handleClose = () => setShow(false);
     const [OptionsValue, setoptions] = useState([])
     const usenavigate = useNavigate();
-    //  const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
-    const url = "http://localhost:8000";
+    const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
+  //  const url = "http://localhost:8000";
 
 
     useEffect(() => {
@@ -171,7 +171,7 @@ export default function Textform(prop) {
 
         textarea.select();
 
-        document.execCommand("copy");
+       // document.execCommand("copy");
 
         document.body.removeChild(textarea);
         setTimeout(function () {
@@ -406,23 +406,7 @@ export default function Textform(prop) {
                             </Badge>
 
                         </div>
-                        { /*   <Form.Group controlId="formFileSm" className="mb-3" aria-disabled>
-                           <span> <Form.Control type="file" id="mydoc" onChange={onFileChange}  size="sm" />
-                            <Button className='btn btn-dark' size="sm" onClick={onFileUpload}>Save</Button></span>
-                           
-                        </Form.Group>
-
-                          <div className='col-lg-2'>
-                        <FloatingLabel controlId="floatingSelect" label="" onChange={myfiles}>
-                            <Form.Select aria-label="Default select example" size="sm" style={{ border: 'none', backgroundColor: '#343a40', color: '#fff', height: '33px' }} className='form-control'>
-                                {OptionsValue.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </Form.Select >
-                        </FloatingLabel>
-                                </div>*/}
+                      
 
                         <div className='col-lg-1 ml-auto mr-2'>
 
@@ -465,18 +449,7 @@ export default function Textform(prop) {
 
              
             <div className='container col-lg-3 mx-2 ' style={{ paddingBottom: '20px' }}>
-                {/*  <div className='row'>
-                    <Card  style={{ width: '26rem', boxShadow: '1px 2px 9px #6c757d', margin: '1em' }} className="mb-2 roundborder">
-                    <form  className='container margintopbottom'>
-                    <div className='card'>
-                    <Card.Header>
-                    <input type="text" placeholder='Search' id="filename" autoFocus className='form-control'></input>
-                    </Card.Header>
-                    </div>
-                    </form>
-                    </Card>
-                       
-                            </div>*/}
+               
                     <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id = 'allnotes' style={{ backgroundColor: '#28a745', color: 'white' }} onClick = {renderData} >All</Button>
                     <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id = 'starrednotes' onClick = {showstarred}>Starred</Button>
                 <div className='row scrollable'>

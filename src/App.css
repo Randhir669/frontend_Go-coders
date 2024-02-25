@@ -50,6 +50,11 @@
   margin-top:30px;
   margin-bottom:30px
 }
+.margintopbottomsignup{
+
+  margin-top:80px !important;
+  margin-bottom:80px!important;
+}
 .textcolor{
   text-emphasis-color: white;
 }
@@ -224,4 +229,10 @@ footer hr {
   cursor: default !important;
 }
 
+.signupshadow{
+  box-shadow: 1px 2px 9px #6c757d;
+  margin-top: 40px;
+  margin-bottom: 15px;
+  
+}
 

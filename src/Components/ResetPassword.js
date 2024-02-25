@@ -27,8 +27,8 @@ export default function ResetPassword() {
 
 
 
-   // const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
-    const url = "http://localhost:8000";
+    const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com"
+   // const url = "http://localhost:8000";
     const form = useRef();
     const navigate = useNavigate('');
 

@@ -9,28 +9,30 @@ import withReactContent from 'sweetalert2-react-content'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faStar } from '@fortawesome/free-solid-svg-icons';
 import Select from "react-select";
-
+import LoadingBar from 'react-top-loading-bar'
 
 
 export default function Filemanager() {
     // eslint-disable-next-line
-    const [mydoc, setmydoc] = useState('');
-    const [myalldoc, setmyalldoc] = useState([]);
+    const [mydoc, setmydoc] = useState([]);
     const usenavigate = useNavigate();
     const [OptionsValue, setoptions] = useState([])
-    const [AllFiles, setfiles] = useState([])
-    const [historyOptionsValue, setoptionsofhistory] = useState([])
+    const [AlldocsData, setalldocsdata] = useState([])
+    const [AllFiles, setallfiles] = useState([])
+    const [historydata, sethistorydata] = useState([])
+    const [starreddoc, setstarreddoc] = useState([])
     const [alluserlist, setallusers] = useState([])
     const MySwal = withReactContent(Swal)
-    const [Save, setSave] = useState('Save')
+    const [Saveloading, setSaveloading] = useState('')
     const [showfiles, setShowFiles] = useState(true)
     const [showfilesHistory, setShowHistory] = useState(false)
     const [Send, setSend] = useState('Send')
-    const[SearchQuery,setSearchQuery] = useState('')
+    const [SearchQuery, setSearchQuery] = useState('')
+    const [progress, setProgress] = useState(0)
 
     const [selectedUser, setSelectedUser] = useState('');
-    //const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
-     const url = "http://localhost:8000";
+    const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
+    //const url = "http://localhost:8000";
 
 
     const handleChangeUser = (selectedUser) => {
@@ -43,71 +45,22 @@ export default function Filemanager() {
         if (username === '' || username === null) {
             usenavigate('/');
         }
-
-    });// eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        renderAllUsers()
-
-    }, []);// eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        historyOfSharedDocs()
+        console.log("inside useeffect")
+        async function fetchalldata() {
+            await renderAllUsers()
+            await historyOfSharedDocs()
+            await renderAllDocs()
+            
+        }
+        fetchalldata();
 
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        renderAllDocs()
-    }, []);// eslint-disable-line react-hooks/exhaustive-deps
-
-  /*  useEffect(() => {
-        let timeoutId = setTimeout(logout, 600000);
-        console.log(timeoutId) 
-    }, []);// eslint-disable-line react-hooks/exhaustive-deps
-
-    function logout() {
-          usenavigate('/');
-
-    }*/
 
     
-    const [idleTime, setIdleTime] = useState(0);
-
-    useEffect(() => {
-        let intervalId;
-
-        const resetIdleTime = () => {
-            setIdleTime(0);
-        };
-
-        const handleMouseMove = () => {
-            resetIdleTime();
-        };
-
-        const handleTimeout = () => {
-            usenavigate('/'); // Logout action
-        };
-
-        intervalId = setInterval(() => {
-            setIdleTime(prevIdleTime => prevIdleTime + 1);
-            if (idleTime >= 2 * 60) { // 5 minutes * 60 seconds
-                handleTimeout();
-            }
-        }, 1000); // 1-second interval
-
-        document.addEventListener('mousemove', handleMouseMove);
-
-        return () => {
-            clearInterval(intervalId);
-            document.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, [idleTime, usenavigate]);
-
-
     function Showfiles() {
-        renderAllDocs()
         setShowFiles(true)
         setShowHistory(false)
+        setoptions(AlldocsData)
 
         var filesbtnElement = document.getElementById('files');
         filesbtnElement.style.backgroundColor = '#28a745'
@@ -125,6 +78,7 @@ export default function Filemanager() {
     function ShowfilesHistory() {
         setShowFiles(false)
         setShowHistory(true)
+        setoptions(historydata)
         var historybtnElement = document.getElementById('history');
         historybtnElement.style.backgroundColor = '#28a745'
         historybtnElement.style.color = 'white'
@@ -138,116 +92,13 @@ export default function Filemanager() {
         starredbtnElement.style.color = ''
     }
 
-    function renderAllUsers() {
 
-        fetch(url + "/userdata").then((res) => {
-            return res.json();
-        }).then((resp) => {
-            let userobj = {}
-            let allusersnames = [];
-            let cid = sessionStorage.getItem('username');
-            if (resp != null) {
-
-                for (let i = 0; i < resp.length; i++) {
-                    if (resp[i]['id'] !==cid) {
-                        userobj['label'] = resp[i]['id']
-                        userobj['value'] = resp[i]['id']
-                        allusersnames.push(userobj);
-                        userobj = {};
-                    }
-                }
-                setallusers(allusersnames)
-            } else {
-                setallusers(allusersnames)
-            }
-        })
-    }
-    function renderAllDocs() {
-        let id = sessionStorage.getItem('username');
-
-        fetch(url + "/alldoc/" + id).then((res) => {
-            return res.json();
-        }).then((resp) => {
-
-            let myobj = {}
-            let options = [];
-            let docobj = {};
-            let alldocnames = [];
-
-            if (resp != null) {
-
-                for (let i = 0; i < resp.length; i++) {
-
-                    myobj['id'] = i + 1
-                    myobj['filename'] = resp[i]['filename']
-                    myobj['Dateandtime'] = resp[i]['savedatetime']
-                    myobj['sendBy'] = resp[i]['sendby']
-                    myobj['download'] = <Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(resp[i]['filename'])}>Download</Button>
-                    myobj['action'] = <FontAwesomeIcon icon={faTrash} className="ml-1 btn" style={{ cursor: 'pointer' }} onClick={() => Deletefile(resp[i]['fid'])} />
-                    myobj['fid'] = resp[i]['fid']
-                    myobj['isstarred'] = resp[i]['isstarred']
-                    docobj['label'] = resp[i]['filename']
-                    docobj['value'] = resp[i]['fid']
-                    alldocnames.push(docobj)
-                    options.push(myobj);
-                    docobj = {};
-                    myobj = {};
-
-                }
-                setoptions(options)
-                setfiles(options)
-            } else {
-                setoptions(options)
-                setfiles(options)
-            }
-        })
-    }
-
-    function historyOfSharedDocs() {
-
-        let id = sessionStorage.getItem('username');
-
-        fetch(url + "/allhistorydoc/" + id).then((res) => {
-            return res.json();
-        }).then((resp) => {
-
-            let myobj = {}
-            let options = [];
-            let docobj = {};
-            let alldocnames = [];
-
-            if (resp != null) {
-
-                for (let i = 0; i < resp.length; i++) {
-
-                    myobj['id'] = i + 1
-                    myobj['filename'] = resp[i]['filename']
-                    myobj['Dateandtime'] = resp[i]['savedatetime']
-                    myobj['sendTo'] = resp[i]['username']
-                    myobj['download'] = <Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(resp[i]['filename'])}>Download</Button>
-                    myobj['action'] = <FontAwesomeIcon icon={faTrash} className="ml-1 btn" style={{ cursor: 'pointer' }} onClick={() => Deletefile(resp[i]['fid'])} />
-                    myobj['fid'] = resp[i]['fid']
-                    docobj['label'] = resp[i]['filename']
-                    docobj['value'] = resp[i]['fid']
-                    alldocnames.push(docobj)
-                    options.push(myobj);
-                    docobj = {};
-                    myobj = {};
-
-                }
-                setoptionsofhistory(options)
-            } else {
-                setoptionsofhistory(options)
-            }
-
-
-        })
-    }
-
-    function renderStarredDocs() {
+    function showStarredDocs() {
 
         setShowFiles(true)
         setShowHistory(false)
+        setoptions(starreddoc)
+        console.log("starreddoc", starreddoc)
 
         var starredbtnElement = document.getElementById('starred');
         starredbtnElement.style.backgroundColor = '#28a745'
@@ -261,39 +112,121 @@ export default function Filemanager() {
         filesbtnElement.style.backgroundColor = ''
         filesbtnElement.style.color = ''
 
+    }
 
-        let myobj = {}
-        let options = [];
-        let docobj = {};
-        let alldocnames = [];
+    async function renderAllUsers() {
+        try {
+            let response = await fetch(url + "/userdata")
+            debugger
+            if (response.ok === true) {
+                let resp = await response.json()
+                if (resp.length !== 0) {
+                    let cid = sessionStorage.getItem('username');
+                    let filtereddata = resp.filter((res) => { return res.id !== cid }).map((data) => {
+                        return {
+                            'label': data.id,
+                            'value': data.id
+                        }
+                    })
+                    setallusers(filtereddata)
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async function renderAllDocs() {
+        let id = sessionStorage.getItem('username');
 
-        debugger
+        try {
+            let response = await fetch(url + "/alldoc/" + id)
+            if (response.ok) {
+                let resp = await response.json()
+                if (resp.length !== 0) {
+                    let myobj = {}
+                    let options = [];
+                    let docobj = {};
+                    let alldocnames = [];
+                    for (let i = 0; i < resp.length; i++) {
+                        myobj['id'] = i + 1
+                        myobj['filename'] = resp[i]['filename']
+                        myobj['Dateandtime'] = resp[i]['savedatetime']
+                        myobj['sendBy'] = resp[i]['sendby']
+                        myobj['download'] = <Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(resp[i]['filename'])}>Download</Button>
+                        myobj['action'] = <FontAwesomeIcon icon={faTrash} className="ml-1 btn" style={{ cursor: 'pointer' }} onClick={() => Deletefile(resp[i]['fid'])} />
+                        myobj['fid'] = resp[i]['fid']
+                        myobj['isstarred'] = resp[i]['isstarred']
+                        docobj['label'] = resp[i]['filename']
+                        docobj['value'] = resp[i]['fid']
+                        alldocnames.push(docobj)
+                        options.push(myobj);
+                        docobj = {};
+                        myobj = {};
+                    }
+                    let j = 0
+                    let data = options.filter((opt) => { return opt.isstarred }).map((data) => {
+                        return {
+                            ...data,
+                            'id': ++j,
 
-        for (let i = 0, j = 0; i < OptionsValue.length; i++) {
-            if (OptionsValue[i]['isstarred']) {
-                myobj['id'] = ++j
-                myobj['filename'] = OptionsValue[i]['filename']
-                myobj['Dateandtime'] = OptionsValue[i]['Dateandtime']
-                myobj['sendBy'] = OptionsValue[i]['sendBy']
-                myobj['download'] = <Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(OptionsValue[i]['filename'])}>Download</Button>
-                myobj['action'] = <FontAwesomeIcon icon={faTrash} className="ml-1 btn" style={{ cursor: 'pointer' }} onClick={() => Deletefile(OptionsValue[i]['fid'])} />
-                myobj['fid'] = OptionsValue[i]['fid']
-                myobj['isstarred'] = OptionsValue[i]['isstarred']
-                docobj['label'] = OptionsValue[i]['label']
-                docobj['value'] = OptionsValue[i]['value']
-                alldocnames.push(docobj)
-                options.push(myobj);
-                docobj = {};
-                myobj = {};
+                        }
+                    })
+                    console.log(options)
+                    setstarreddoc(sortdatabydate(data))
+                    setoptions(sortdatabydate(options))
+                    setalldocsdata(options)
+                    setallfiles(options)
+                }
             }
 
+        } catch (error) {
+            console.log(error)
         }
-        setoptions(options)
+    }
+
+    function sortdatabydate(data){
+        return data.sort((a,b)=>
+        new Date(b.Dateandtime) - new Date(a.Dateandtime)
+        )
 
     }
 
-    function Onsharefiles() {
+    async function historyOfSharedDocs() {
 
+        let id = sessionStorage.getItem('username');
+        try {
+            let response = await fetch(url + "/allhistorydoc/" + id)
+            if (response.ok) {
+                let resp = await response.json()
+                if (resp.length !== 0) {
+                    let myobj = {}
+                    let options = [];
+                    let docobj = {};
+                    let alldocnames = [];
+                    for (let i = 0; i < resp.length; i++) {
+                        myobj['id'] = i + 1
+                        myobj['filename'] = resp[i]['filename']
+                        myobj['Dateandtime'] = resp[i]['savedatetime']
+                        myobj['sendTo'] = resp[i]['username']
+                        myobj['download'] = <Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(resp[i]['filename'])}>Download</Button>
+                        myobj['action'] = <FontAwesomeIcon icon={faTrash} className="ml-1 btn" style={{ cursor: 'pointer' }} onClick={() => Deletefile(resp[i]['fid'])} />
+                        myobj['fid'] = resp[i]['fid']
+                        docobj['label'] = resp[i]['filename']
+                        docobj['value'] = resp[i]['fid']
+                        alldocnames.push(docobj)
+                        options.push(myobj);
+                        docobj = {};
+                        myobj = {};
+                    }
+                    sethistorydata(options)
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function Onsharefiles() {
         const formData = new FormData();
         const date = new Date();
         const options = { timeZone: 'Asia/Kolkata' };
@@ -318,20 +251,13 @@ export default function Filemanager() {
 
         } else {
             setSend('Sending...')
-            formData.append(
-                "myFile",
-                mydoc,
-                mydoc.fileName,
-
-            );
+            formData.append("myFile", mydoc, mydoc.name,);
             formData.append('username', sendto);
             formData.append('savedatetime', formattedDate);
             formData.append('sendBy', sendBy)
 
-            fetch(url + "/fileupload", {
-                method: "POST",
-                body: formData
-            }).then((res) => {
+            let response = await fetch(url + "/fileupload", { method: "POST", body: formData })
+            if (response.ok) {
                 MySwal.fire({
                     title: <strong>Sent!</strong>,
                     html: <i>Data Shared Successfully!</i>,
@@ -341,25 +267,18 @@ export default function Filemanager() {
                 setSelectedUser('');
                 setSend('Send')
                 historyOfSharedDocs();
-                renderAllDocs();
-
-            }).catch((err) => {
-                console.log(err)
-
-            })
-
+            }
         }
     }
 
     function onFileChange(event) {
-        debugger
         // eslint-disable-next-line
-        const selectedfiles = event.target.files
         let filesize = event.target.files[0].size / 1048576;
-        if (filesize > 10) {
+
+        if (filesize > 50) {
             MySwal.fire({
                 title: <strong>File size Exceeds!</strong>,
-                html: <i>please choose a file of less than 10MB</i>,
+                html: <i>please choose a file of less than 50MB</i>,
                 icon: 'warning'
             })
             const inputField = document.getElementById("mydoc");
@@ -367,17 +286,13 @@ export default function Filemanager() {
             inputField.value = '';
             shareFileInputField.value = '';
         } else {
-            //  setmydoc(event.target.files[0])
-            setmyalldoc(event.target.files)
-            console.log("myalldoc", myalldoc)
-
+            setmydoc(event.target.files[0])
+            console.log("mydoc", mydoc)
         }
 
     }
 
-    function onFileUpload() {
-
-        debugger
+    async function onFileUpload() {
         if (document.getElementById("mydoc").value === '') {
             MySwal.fire({
                 title: <strong>File not found!</strong>,
@@ -385,69 +300,56 @@ export default function Filemanager() {
                 icon: 'warning'
             })
         } else {
-            setSave('Saving...')
+            setSaveloading(true)
+            const formData = new FormData();
+            const date = new Date();
+            const options = { timeZone: 'Asia/Kolkata' };
+            const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
+            const inputField = document.getElementById("mydoc");
+            let username = sessionStorage.getItem('username');
+            let sendBy = ''
+            formData.append(
+                "myFile",
+                mydoc,
+                mydoc.name,
 
-            for (let i = 0; i < myalldoc.length; i++) {
-                debugger
-                const formData = new FormData();
-                const date = new Date();
-                const options = { timeZone: 'Asia/Kolkata' };
-                const formattedDate = date.toLocaleString('en-IN', { ...options, dateStyle: 'medium', timeStyle: 'medium' }).replace(/\//g, '-');
-                const inputField = document.getElementById("mydoc");
-                let username = sessionStorage.getItem('username');
-                let sendBy = ''
-
-                /*    if (document.getElementById("mydoc").value === '') {
-                        MySwal.fire({
-                            title: <strong>File not found!</strong>,
-                            html: <i>please choose a file to upload</i>,
-                            icon: 'warning'
-                        })
-                    } else {*/
-
-                formData.append(
-                    "myFile",
-                    myalldoc[i],
-                    myalldoc[i].fileName,
-
-                );
-                formData.append('username', username);
-                formData.append('savedatetime', formattedDate);
-                formData.append('sendBy', sendBy)
-                fetch(url + "/fileupload", {
-                    method: "POST",
-                    body: formData
-                }).then((res) => {
+            );
+            formData.append('username', username);
+            formData.append('savedatetime', formattedDate);
+            formData.append('sendBy', sendBy)
+            try {
+                let response = await fetch(url + "/fileupload", { method: "POST", body: formData })
+                if (response.ok) {
                     console.log("Data Upload Successfully")
                     inputField.value = '';
-                      renderAllDocs()
-                       setSave('Save')
-
-                }).catch((err) => {
-                    console.log(err)
-
-                })
+                    await renderAllDocs()
+                    //setSaveloading('none')
+                }
+            } catch (error) {
+                console.log(error)
             }
         }
-     //   renderAllDocs()
-      //  setSave('Save')
     }
 
-    function ondownload(filename) {
+  async  function ondownload(filename) {
+    setProgress(progress + 10)
+       try{
+            let response = await fetch(url + "/filedownload/" + filename)
+            if(response.ok){
+                let blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
 
-        fetch(url + "/filedownload/" + filename).then((res) => {
-            return res.blob();
-        }).then(blob => {
-            // create a temporary URL to the blob
-            const url = URL.createObjectURL(blob);
-            // create a link element and click it to initiate download
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        })
+        }catch(error){
+            console.log(error)
+        }
+       setProgress(100)
     }
 
     function Deletefile(fid) {
@@ -492,8 +394,6 @@ export default function Filemanager() {
                     console.log(err)
 
                 })
-            } else {
-
             }
 
 
@@ -501,75 +401,49 @@ export default function Filemanager() {
 
     }
 
-    function toggleStarred(fid, status) {
+    async function toggleStarred(fid, status) {
         var option = OptionsValue;
-        console.log("option", option)
         // eslint-disable-next-line
         let element = document.getElementById(fid)
-        debugger
-        if (status) {
-            element.setAttribute('color', 'grey');
-        } else {
-            element.setAttribute('color', 'gold');
-        }
-        for (let i = 0; i < option.length; i++) {
-            debugger
-            if (option[i].fid === fid) {
-                let status = OptionsValue[i].isstarred
-                option[i].isstarred = !status
-            }
-        }
-
-        setoptions(option)
-
+        element.setAttribute('color', status ? 'grey' : 'gold');
+        let data = option.map((data) => { return  (data.fid === fid) ? { ...data, 'isstarred': !data.isstarred } : { ...data } })
+        setoptions(data)
         let username = sessionStorage.getItem('username');
-
         let textobj = {
-
             "username": username,
             "isstarred": !status
-
         }
-
-        fetch(url + "/starredfile/" + fid, {
-            method: "PUT",
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(textobj)
-        }).then((res) => {
-            //  alert("Data saved")
-            //   renderAllDocs()
-            //  historyOfSharedDocs()
-
-        }).catch((err) => {
-            console.log(err)
-
-        })
-
+        try {
+            let response = await fetch(url + "/starredfile/" + fid, {
+                method: "PUT", headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(textobj)
+            })
+            if (response.ok) {
+                renderAllDocs()
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    function filterFiles(event){
-        debugger
+    function filterFiles(event) {
         const searchText = event.target.value;
         setSearchQuery(searchText);
-         // Update the search query state
-        if(searchText!=""){
+        if (searchText !== "") {
             const filteredFiles = AllFiles.filter(file =>
                 file.filename.toLowerCase().includes(searchText.toLowerCase())
             );
-              console.log(filteredFiles);
-              setoptions(filteredFiles)
-        }else{
-            console.log(OptionsValue);
+            setoptions(filteredFiles)
+        } else {
             setoptions(AllFiles)
         }
-       
 
     }
-    
+
     return (
         <>
             <div className="container mx-3 col-lg-5 my-5" style={{ marginleft: '0px' }}>
-
+            <LoadingBar color="#FF3333" height='5' progress={progress} onLoaderFinished={() => setProgress(0)} />
                 <Card>
                     <Card.Header className='card text-center' style={{ backgroundColor: 'black', color: 'white' }}>
                         <h4> File Upload Section</h4>
@@ -577,8 +451,9 @@ export default function Filemanager() {
                     <Card.Body>
                         <Form.Group controlId="formFile" className="mb-3">
                             <Form.Label>Browse A File To Upload</Form.Label>
-                            <Form.Control type="file" id="mydoc" onChange={onFileChange} />
-                            <span><Button className='btn btn-dark my-2' size="" onClick={onFileUpload}>{Save}</Button></span>
+                            <input className='form-control' type="file" id="mydoc" onChange={onFileChange} />
+                            <span><Button className='btn btn-dark my-2' size="" onClick={onFileUpload}> <span class="spinner-border spinner-border-sm" role="status" aria-hidden="false" style={{display: 'none'}}></span>
+                            Save</Button></span>
                         </Form.Group>
                     </Card.Body>
 
@@ -606,7 +481,7 @@ export default function Filemanager() {
                             </Form.Group>
                             <Form.Group controlId="formFile" className="col-lg-6">
                                 <Form.Label>Browse A File To Share</Form.Label>
-                                <Form.Control type="file" id="sharedoc" onChange={onFileChange} />
+                                <input className='form-control' type="file" id="sharedoc" onChange={onFileChange} />
                             </Form.Group>
                         </div>
                         <span><Button className='btn btn-dark my-2' size="" onClick={Onsharefiles}>{Send}</Button></span>
@@ -618,13 +493,13 @@ export default function Filemanager() {
                 <Card>
                     <Card.Header className='card text-center' style={{ backgroundColor: 'black' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <Button className='btn my-2' variant="outline-success" id='starred' onClick={renderStarredDocs}>Starred</Button>
+                            <Button className='btn my-2' variant="outline-success" id='starred' onClick={showStarredDocs}>Starred</Button>
                             <Button className='btn my-2 ml-2' variant="outline-success" id='files' style={{ backgroundColor: '#28a745', color: 'white' }} onClick={Showfiles}>Files</Button>
                             <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id='history' onClick={ShowfilesHistory}>History</Button>
 
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'right' ,width:'25%'}}>
-                        <input  className="form-control" variant="outline-success" value = {SearchQuery} type="search" onChange={filterFiles} placeholder="Search" aria-label="Search"/>
+                        <div style={{ display: 'flex', justifyContent: 'right', width: '25%' }}>
+                            <input className="form-control" variant="outline-success" value={SearchQuery} type="search" onChange={filterFiles} placeholder="Search" aria-label="Search" />
 
                         </div>
                     </Card.Header>
@@ -646,7 +521,7 @@ export default function Filemanager() {
                             <tbody>
                                 {OptionsValue.map(option => (
                                     <tr key={option.id}>
-                                        <td>{option.id}</td>
+                                         <td></td>
                                         <td>{option.filename}&nbsp;&nbsp; <FontAwesomeIcon icon={faStar} id={option.fid} onClick={() => toggleStarred(option.fid, option.isstarred)} style={{ cursor: 'pointer', }} color={option.isstarred ? 'gold' : 'grey'} /></td>
                                         <td>{option.Dateandtime}{option.sendBy ? <b><br></br>SentBy: {option.sendBy}</b> : ''}</td>
                                         <td><Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(option.filename)}>Download</Button> </td>
@@ -672,9 +547,9 @@ export default function Filemanager() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {historyOptionsValue.map(option => (
+                                {historydata.map(option => (
                                     <tr key={option.id}>
-                                        <td>{option.id}</td>
+                                        <td></td>
                                         <td>{option.filename}</td>
                                         <td>{option.Dateandtime}</td>
                                         <td><Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(option.filename)}>Download</Button> </td>
