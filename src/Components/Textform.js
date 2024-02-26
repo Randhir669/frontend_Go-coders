@@ -20,10 +20,11 @@ export default function Textform(prop) {
     const [showUpdateButton, setShowUpdateButton] = useState(false);
     const [noOfFiles, setnoOfFiles] = useState(0);
     const [currentfileid, setcurrentfileid] = useState('');
-
+    const [loaddata, setloaddata] = useState(true)
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
     const [OptionsValue, setoptions] = useState([])
+    const [allfiles, setallfiles] = useState([])
+    const [allstarredfiles, setallstarredfiles] = useState([])
     const usenavigate = useNavigate();
     const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
   //  const url = "http://localhost:8000";
@@ -38,109 +39,90 @@ export default function Textform(prop) {
         if (username === '' || username === null) {
             usenavigate('/');
         }
-        renderData();
+        async function fetchalldata() {
+            await renderData();
+            setloaddata(false)
+        }
+        fetchalldata()
+
     }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
-    function renderData() {
-
-        var starredbtnElement = document.getElementById('starrednotes');
-        starredbtnElement.style.backgroundColor = ''
-        starredbtnElement.style.color = ''
-
-        var allbtnElement = document.getElementById('allnotes');
-        allbtnElement.style.backgroundColor = '#28a745'
-        allbtnElement.style.color = 'white'
-
-
+    async function renderData() {
 
         let id = sessionStorage.getItem('username');
-        fetch(url + "/filedata/" + id).then((res) => {
-            return res.json();
-        }).then((resp) => {
-            let myobj = {}
-            let options = [];
-
-            if (resp != null) {
+        let response = await fetch(url + "/filedata/" + id)
+        if (response.ok) {
+            let resp = await response.json()
+            let options
+            if (resp !== null) {
+                options = [...resp];
                 setnoOfFiles(resp.length)
-
-                for (let i = 0; i < resp.length; i++) {
-                    myobj['value'] = resp[i]['filename']
-                    myobj['textcontent'] = resp[i]['filecontent']
-                    myobj['datetime'] = resp[i]['savedatetime']
-                    myobj['id'] = resp[i]['uuid']
-                    myobj['isstarred'] = resp[i]['isstarred']
-                    options.push(myobj);
-                    myobj = {};
-                }
-
-                options.reverse()
-                setoptions(options)
-
-
+                setallfiles(options)
+                setoptions(options.reverse())
+                let starred = options.filter((option) => option.isstarred)
+                setallstarredfiles(starred)
             } else {
                 setnoOfFiles(0)
                 setoptions(options)
-
             }
-
-        })
+        }
     }
 
-    function showstarred() {
-        
+    function showFiles(type) {
         var starredbtnElement = document.getElementById('starrednotes');
-        starredbtnElement.style.backgroundColor = '#28a745'
-        starredbtnElement.style.color = 'white'
-
         var allbtnElement = document.getElementById('allnotes');
-        allbtnElement.style.backgroundColor = ''
-        allbtnElement.style.color = ''
 
-        let myobj = {}
-        let options = [];
+        // Reset styles for both buttons
+        starredbtnElement.style.backgroundColor = '';
+        starredbtnElement.style.color = '';
+        allbtnElement.style.backgroundColor = '';
+        allbtnElement.style.color = '';
 
-        for (let i = 0; i < OptionsValue.length; i++) {
-
-            if(OptionsValue[i]['isstarred']){
-                myobj['value'] = OptionsValue[i]['value']
-                myobj['textcontent'] = OptionsValue[i]['textcontent']
-                myobj['datetime'] = OptionsValue[i]['datetime']
-                myobj['id'] = OptionsValue[i]['id']
-                myobj['isstarred'] = OptionsValue[i]['isstarred']
-                options.push(myobj);
-                myobj = {};
-
-            }
-
-        }
-        setoptions(options)
-    }
-
-    function handleSpeak() {
-        if ('speechSynthesis' in window) {
-            const synth = window.speechSynthesis;
-            const utterance = new SpeechSynthesisUtterance(text);
-            const voices = synth.getVoices();
-            utterance.voice = voices.find(v => v.name === 'Google US English');
-            utterance.rate = 0.8;
-            utterance.pitch = 0.8;
-            synth.speak(utterance);
-        } else {
-            alert('Sorry, your browser does not support speech synthesis.');
+        // Apply styles based on the type parameter
+        if (type === 'starred') {
+            starredbtnElement.style.backgroundColor = '#28a745';
+            starredbtnElement.style.color = 'white';
+            setoptions(allstarredfiles);
+        } else if (type === 'all') {
+            allbtnElement.style.backgroundColor = '#28a745';
+            allbtnElement.style.color = 'white';
+            setoptions(allfiles);
         }
     }
+    const handleClose = () => setShow(false);
+    function actionontext(type) {
+        let currentText = text;
 
-    function handleToUpperCase() {
-        var currentText = text;
-        var newText = currentText.toUpperCase();
-        setText(newText);
+        if (type === 'uppercase') {
+            let newText = currentText.toUpperCase();
+            setText(newText);
+        }
+        if (type === 'lowercase') {
+            var newText = text.toLowerCase();
+            setText(newText);
+        }
+
+        if (type === 'copy') {
+            var copyText = document.getElementById("mybox");
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+        }
+
+        if(type==='removespaces'){
+            var newtext = text.split(/[ ]+/);
+            setText(newtext.join(" "));
+        }
+
+        if(type==='clear'){
+            setText("");
+        if (showUpdateButton === true) {
+            setShowUpdateButton(false);
+            setShowSaveButton(true);
+        }
+        }
+
     }
-
-    function handleToLowerCase() {
-        var newText = text.toLowerCase();
-        setText(newText);
-    }
-
+    
     function download(content, filename) {
 
         const element = document.createElement("a");
@@ -152,13 +134,7 @@ export default function Textform(prop) {
         element.click();
 
     }
-    function handleToCopy() {
-
-        var copyText = document.getElementById("mybox");
-        copyText.select();
-        navigator.clipboard.writeText(copyText.value);
-    }
-
+   
     function Copycontent(id) {
 
         var cardTextElement = document.getElementById(id);
@@ -171,90 +147,43 @@ export default function Textform(prop) {
 
         textarea.select();
 
-       // document.execCommand("copy");
+        document.execCommand("copy");
 
         document.body.removeChild(textarea);
         setTimeout(function () {
-            // Code to be executed after the delay
             cardTextElement.style.backgroundColor = ''
         }, 2000);
-        console.log("Copied text: " + textToCopy);
-    }
-
-    function handleToRemoveSpaces() {
-        var newtext = text.split(/[ ]+/);
-        setText(newtext.join(" "));
     }
 
     function goToOnchange(event) {
         setText(event.target.value);
 
     }
-    function clear() {
-        setText("");
-        if (showUpdateButton === true) {
-            setShowUpdateButton(false);
-            setShowSaveButton(true);
-        }
-
-    }
-
-    function validating_filename(action) {
-        saveto()
-    }
-
+    
     function save() {
-        setShow(true);
+        if(text!==''){
+            setShow(true);
+        }
+        
     }
 
-    function myfiles(fileid) {
-
+    function editfiles(fileid) {
         setcurrentfileid(fileid)
-
-        if (fileid !== 'My Files') {
-
-            let id = sessionStorage.getItem('username');
-            fetch(url + "/filedata/" + id).then((res) => {
-                return res.json();
-            }).then((resp) => {
-                console.log(resp)
-                let filetext = ""
-                for (let i = 0; i < resp.length; i++) {
-                    if (resp[i].uuid === fileid) {
-                        filetext = resp[i].filecontent
-                    }
-
-                }
-                setText(filetext)
-                if (showUpdateButton === false) {
-                    setShowUpdateButton(true);
-                    setShowSaveButton(false);
-                }
-
-            })
-        } else {
-
-            setText('')
-            if (showUpdateButton === true) {
-                setShowUpdateButton(false);
-                setShowSaveButton(true);
-            }
+        let currentfile = allfiles.filter(allfile => {
+            return allfile.uuid === fileid
+        })
+        setText(currentfile[0].filecontent)
+        if (showUpdateButton === false) {
+            setShowUpdateButton(true);
+            setShowSaveButton(false);
         }
+
     }
 
     function saveto() {
 
         setShow(false);
-
-        let filename = ""
-        if (showUpdateButton === true) {
-            //  filename = currentfilename;
-
-            alert("Data Updated")
-        } else {
-            filename = document.getElementById('filename').value
-        }
-
+        let filename = document.getElementById('filename').value
         let username = sessionStorage.getItem('username');
         const date = new Date();
         const options = { timeZone: 'Asia/Kolkata' };
@@ -271,7 +200,6 @@ export default function Textform(prop) {
             "savedatetime": formattedDate,
             "isstarred": false,
         }
-
         fetch(url + "/filedata", {
             method: "POST",
             headers: { 'content-type': 'application/json' },
@@ -300,16 +228,12 @@ export default function Textform(prop) {
             "savedatetime": formattedDate
 
         }
-
         console.log(textobj)
-
-
         fetch(url + "/fileupdate/" + currentfileid, {
             method: "PUT",
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(textobj)
         }).then((res) => {
-            //  alert("Data saved")
             renderData()
             alert("file updated")
         }).catch((err) => {
@@ -320,8 +244,7 @@ export default function Textform(prop) {
     }
 
     function Deletefile(fileid) {
-        //   alert("file deleted")
-
+       
         let username = sessionStorage.getItem('username');
         const date = new Date();
         const options = { timeZone: 'Asia/Kolkata' };
@@ -391,8 +314,6 @@ export default function Textform(prop) {
 
     }
 
-    /*    */
-
     return (
         <>
             <div className="container mx-3 col-lg-8" style={{ marginleft: '0px' }}>
@@ -406,11 +327,9 @@ export default function Textform(prop) {
                             </Badge>
 
                         </div>
-                      
 
                         <div className='col-lg-1 ml-auto mr-2'>
-
-                            <Button className='btn btn-light mx-1' size="sm" onClick={clear}>Reset</Button>
+                            <Button className='btn btn-light mx-1' size="sm" onClick={()=>actionontext('clear')}>Reset</Button>
                         </div>
 
                     </div>
@@ -422,14 +341,10 @@ export default function Textform(prop) {
                     </div>
                     <div className='row my-2 mx-1'>
                         <DropdownButton id="dropdown-item-button-dark" className="" variant="dark" title="Text Action">
-                            <Dropdown.Item as="button" variant="dark" menuVariant="dark" onClick={handleToUpperCase} >Convert To Uppercase</Dropdown.Item>
-                            <Dropdown.Item as="button" onClick={handleToLowerCase} >Convert To LowerCase</Dropdown.Item>
-                            <Dropdown.Item as="button" onClick={handleToCopy} >Copy Text</Dropdown.Item>
-                            <Dropdown.Item as="button" onClick={handleToRemoveSpaces} >Remove Extra Spaces</Dropdown.Item>
-                            <Dropdown.Item as="button" onClick={handleSpeak}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
-                                <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-                                <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
-                            </svg>Speech</Dropdown.Item>
+                            <Dropdown.Item as="button" variant="dark" menuVariant="dark" onClick={()=>actionontext('uppercase')} >Convert To Uppercase</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={()=>actionontext('lowercase')} >Convert To LowerCase</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={()=>actionontext('copy')} >Copy Text</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={()=>actionontext('removespaces')} >Remove Extra Spaces</Dropdown.Item>
 
                         </DropdownButton>
                         {showSaveButton && <button className='btn btn-dark mx-2' onClick={save} >Save</button>}
@@ -447,44 +362,49 @@ export default function Textform(prop) {
 
             </div>
 
-             
+
             <div className='container col-lg-3 mx-2 ' style={{ paddingBottom: '20px' }}>
-               
-                    <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id = 'allnotes' style={{ backgroundColor: '#28a745', color: 'white' }} onClick = {renderData} >All</Button>
-                    <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id = 'starrednotes' onClick = {showstarred}>Starred</Button>
+
+                <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id='allnotes' style={{ backgroundColor: '#28a745', color: 'white' }} onClick={() => showFiles('all')} >All</Button>
+                <Button className='btn my-2 ml-2 mr-2' variant="outline-success" id='starrednotes' onClick={() => showFiles('starred')}>Starred</Button>
                 <div className='row scrollable'>
                     {OptionsValue.map((option) => (
                         <Card border="dark" style={{ width: '26rem', boxShadow: '1px 2px 9px #6c757d', margin: '1em' }} className="mb-2 cards hover-shadow roundborder ">
                             <Card.Header className="d-flex justify-content-between align-items-center">
-                                <span><h6>{option.value}</h6></span>
+                                <span><h6>{option.username}</h6></span>
                                 <div className=''>
-                                    <FontAwesomeIcon icon={faCopy} className="" style={{ cursor: 'pointer' }} onClick={() => Copycontent(option.id)} />
-                                    <FontAwesomeIcon icon={faDownload} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => download(option.textcontent, option.value)} />
-                                    <FontAwesomeIcon icon={faEdit} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => myfiles(option.id)} />
-                                    <FontAwesomeIcon icon={faTrash} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => Deletefile(option.id)} />
+                                    <FontAwesomeIcon icon={faCopy} className="" style={{ cursor: 'pointer' }} onClick={() => Copycontent(option.uuid)} />
+                                    <FontAwesomeIcon icon={faDownload} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => download(option.filecontent, option.username)} />
+                                    <FontAwesomeIcon icon={faEdit} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => editfiles(option.uuid)} />
+                                    <FontAwesomeIcon icon={faTrash} className="ml-1" style={{ cursor: 'pointer' }} onClick={() => Deletefile(option.uuid)} />
                                 </div>
 
                             </Card.Header>
-                            <Card.Body className="scrollablecardbody">
+                            <Card.Body className="scrollablecardbody" >
                                 <Card.Title></Card.Title>
-                                <Card.Text >
-                                    {option.textcontent}
+                                <Card.Text id={option.uuid}>
+                                    {option.filecontent}
                                 </Card.Text>
 
                             </Card.Body>
                             <Card.Footer className="justify-content-between align-items-center">
                                 <FontAwesomeIcon icon={faClock} className="" style={{ marginRight: '10px' }} />
-                                {option.datetime}
-                                <FontAwesomeIcon icon={faStar} onClick={() => toggleStarred(option.id, option.isstarred)} style={{ cursor: 'pointer', marginLeft: '100px' }} color={option.isstarred ? 'gold' : 'grey'} />
+                                {option.savedatetime}
+                                <FontAwesomeIcon icon={faStar} onClick={() => toggleStarred(option.uuid, option.isstarred)} style={{ cursor: 'pointer', marginLeft: '100px' }} color={option.isstarred ? 'gold' : 'grey'} />
                             </Card.Footer>
                         </Card>
                     ))}
                 </div>
+                {loaddata && <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>}
             </div>
 
 
             <Modal show={show} onHide={handleClose}>
-               
+
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3">
@@ -502,7 +422,7 @@ export default function Textform(prop) {
                     <Button variant="light" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="dark" onClick={validating_filename}>
+                    <Button variant="dark" onClick={saveto}>
                         Save Changes
                     </Button>
                 </Modal.Footer>

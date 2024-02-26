@@ -23,12 +23,13 @@ export default function Filemanager() {
     const [starreddoc, setstarreddoc] = useState([])
     const [alluserlist, setallusers] = useState([])
     const MySwal = withReactContent(Swal)
-    const [Saveloading, setSaveloading] = useState('')
+    const [Saveloading, setSaveloading] = useState(true)
     const [showfiles, setShowFiles] = useState(true)
     const [showfilesHistory, setShowHistory] = useState(false)
     const [Send, setSend] = useState('Send')
     const [SearchQuery, setSearchQuery] = useState('')
     const [progress, setProgress] = useState(0)
+    const[loaddata,setloaddata] = useState(true)
 
     const [selectedUser, setSelectedUser] = useState('');
     const url = "https://lnah1ozkmb.execute-api.us-east-1.amazonaws.com";
@@ -37,6 +38,8 @@ export default function Filemanager() {
 
     const handleChangeUser = (selectedUser) => {
         setSelectedUser(selectedUser);
+        console.log(Saveloading)
+        
     };
 
     useEffect(() => {
@@ -47,10 +50,11 @@ export default function Filemanager() {
         }
         console.log("inside useeffect")
         async function fetchalldata() {
+
+            await renderAllDocs()
             await renderAllUsers()
             await historyOfSharedDocs()
-            await renderAllDocs()
-            
+            setloaddata(false)
         }
         fetchalldata();
 
@@ -300,7 +304,7 @@ export default function Filemanager() {
                 icon: 'warning'
             })
         } else {
-            setSaveloading(true)
+            setSaveloading(false)
             const formData = new FormData();
             const date = new Date();
             const options = { timeZone: 'Asia/Kolkata' };
@@ -323,7 +327,7 @@ export default function Filemanager() {
                     console.log("Data Upload Successfully")
                     inputField.value = '';
                     await renderAllDocs()
-                    //setSaveloading('none')
+                    setSaveloading(true)
                 }
             } catch (error) {
                 console.log(error)
@@ -452,8 +456,12 @@ export default function Filemanager() {
                         <Form.Group controlId="formFile" className="mb-3">
                             <Form.Label>Browse A File To Upload</Form.Label>
                             <input className='form-control' type="file" id="mydoc" onChange={onFileChange} />
-                            <span><Button className='btn btn-dark my-2' size="" onClick={onFileUpload}> <span class="spinner-border spinner-border-sm" role="status" aria-hidden="false" style={{display: 'none'}}></span>
-                            Save</Button></span>
+                            {Saveloading ? <Button className='btn btn-dark my-2' size="" onClick={onFileUpload}>
+                            Save</Button>:
+                            <Button class="btn btn-dark my-2" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            &nbsp;Save
+                        </Button>}
                         </Form.Group>
                     </Card.Body>
 
@@ -504,9 +512,12 @@ export default function Filemanager() {
                         </div>
                     </Card.Header>
                 </Card>
-
-                {showfiles && (
+                
+                {showfiles &&(
+                    
+                    
                     <div>
+                        
                         <Table striped bordered hover size="sm" style={{ overflow: 'y', height: '100%' }}>
 
                             <thead>
@@ -518,8 +529,9 @@ export default function Filemanager() {
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {OptionsValue.map(option => (
+                            {OptionsValue.length==0?<p style={{display:'flex'}}>No files to show</p>:
+                         <tbody>
+                        {OptionsValue.map(option => (
                                     <tr key={option.id}>
                                          <td></td>
                                         <td>{option.filename}&nbsp;&nbsp; <FontAwesomeIcon icon={faStar} id={option.fid} onClick={() => toggleStarred(option.fid, option.isstarred)} style={{ cursor: 'pointer', }} color={option.isstarred ? 'gold' : 'grey'} /></td>
@@ -527,12 +539,18 @@ export default function Filemanager() {
                                         <td><Button className='btn my-2' variant="outline-success" size="sm" onClick={() => ondownload(option.filename)}>Download</Button> </td>
                                         <td> <FontAwesomeIcon icon={faTrash} className="ml-1 btn" style={{ cursor: 'pointer' }} onClick={() => Deletefile(option.fid)} /></td>
                                     </tr>
-                                ))}
-                            </tbody>
-
+                                ))}  
+                            </tbody>}
+                          
+            
                         </Table>
+                       
                     </div>
-                )}
+                 
+                    )}
+                       
+
+                    
                 {showfilesHistory && (
                     <div>
                         <Table striped bordered hover size="sm" style={{ overflow: 'y' }}>
@@ -546,6 +564,7 @@ export default function Filemanager() {
                                     <th>SendTo</th>
                                 </tr>
                             </thead>
+                            {historydata.length==0?<p style={{display:'flex'}}>No files to show</p>:
                             <tbody>
                                 {historydata.map(option => (
                                     <tr key={option.id}>
@@ -557,10 +576,16 @@ export default function Filemanager() {
                                         <td><b>{option.sendTo}</b></td>
                                     </tr>
                                 ))}
-                            </tbody>
+                               
+                            </tbody>}
                         </Table>
                     </div>
                 )}
+                 {loaddata&&     <div class="d-flex justify-content-center">
+                     <div class="spinner-border" role="status">
+                       <span class="sr-only">Loading...</span>
+                     </div>
+                     </div>}
 
             </div>
             <div className="container mx-3 col-lg-6 margintopbottom" style={{ marginleft: '0px' }}>
