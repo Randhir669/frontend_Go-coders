@@ -9,6 +9,7 @@ import React from 'react';
 import Login from './Components/Login';
 import About from './Components/About';
 import Filemanager from './Components/Filemanager';
+import Pagenotfound from './Components/Pagenotfound';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import ResetPassword from './Components/ResetPassword';
@@ -79,6 +80,7 @@ function App() {
           
           </Route>
           <Route path='/Forget' element={<ForgetPassword />}></Route>
+          <Route path='/*' element={<Pagenotfound/>}></Route>
           <Route path='/ResetPassword' element={<ResetPassword />}></Route>       
         </Routes>
       </BrowserRouter>
